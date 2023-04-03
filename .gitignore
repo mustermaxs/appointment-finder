@@ -1,0 +1,5 @@
+appointment_finder.code-workspace
+.DS_Store
+config.php
+launch.json
+api/dbConfig.php

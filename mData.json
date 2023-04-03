@@ -1,0 +1,30 @@
+[
+  {
+    "appointmentDate": "13.04.2023",
+    "appointmentid": 1,
+    "creator": "Markus",
+    "description":"",
+    "exporationDate":"11.04.2023",
+    "location":"B2",
+    "title":"study_round"
+  },
+  {
+    "appointmentDate": "10.04.2023",
+    "appointmentid": 2,
+    "creator": "Sebl",
+    "description":"",
+    "exporationDate":"09.04.2023",
+    "location":"Stephans",
+    "title":"Beer_run"
+  }
+  {
+    "appointmentDate": "25.04.2023",
+    "appointmentid": 3,
+    "creator": "Max",
+    "description":"ITProj",
+    "exporationDate":"20.04.2023",
+    "location":"FH",
+    "title":"Finish Project"
+  }
+]
+
