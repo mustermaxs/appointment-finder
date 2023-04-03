@@ -1,0 +1,134 @@
+body {
+    background-color: #fafafa;
+    line-height: 1.6;
+  }
+
+  .lead {
+    font-size: 1.5rem;
+    font-weight: 300;
+  }
+
+  .container {
+    margin: 150px auto;
+    max-width: 960px;
+  }
+
+  .btn {
+    padding: 1.25rem;
+    border: 0;
+    border-radius: 3px;
+    background-color: #4F46E5;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  .output {
+    background: #E5E7EB;
+    padding: 2rem 1rem;
+    border-radius: 5px;
+    margin: 2rem auto;
+    font-size: 1.5rem;
+  }
+
+
+#add-card {
+    font-size: 1.5rem;
+    font-weight: bold;
+    bottom: 20px; 
+    right: 20px;
+}
+
+#checkbox-list {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+   .doodle-container {
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 5px;
+    background-color: #fefefe;
+    transition: all .2s ease;
+  }
+
+  .doodle-container:hover {
+    cursor: pointer;
+    background-color: #d9e8fd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+  
+  .center {
+    position: relative;
+  }
+  
+  .doodle-checkbox {
+    display: block;
+    position: absolute;
+    cursor: pointer;
+    font-size: 14px;
+    user-select: none;
+    left: 50%;
+    margin-left: -12.5px;
+  }
+  
+  .doodle-checkbox input[type="checkbox"] {
+    position: absolute;
+    opacity: 0;
+    height: 0;
+    width: 0;
+  }
+  
+  .custom-checkbox {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+  }
+  
+  .doodle-checkbox:hover input ~ .custom-checkbox {
+    background-color: #f1f1f1;
+  }
+  
+  .doodle-checkbox input:checked ~ .custom-checkbox {
+    background-color: #4CAF50;
+    border: 1px solid #4CAF50;
+  }
+  
+  .custom-checkbox:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  .doodle-checkbox input:checked ~ .custom-checkbox:after {
+    display: block;
+  }
+  
+  .doodle-checkbox .custom-checkbox:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  
+  .option-text {
+    padding-top: 30px;
+    text-align: center;
+  }
+
+
+  .start:hover, .end:hover {
+    cursor: pointer;
+    background-color: #d9e8fd;
+    transition: all .2s ease;
+  }
