@@ -13,14 +13,7 @@ body {
     max-width: 960px;
   }
 
-  .btn {
-    padding: 1.25rem;
-    border: 0;
-    border-radius: 3px;
-    background-color: #4F46E5;
-    color: #fff;
-    cursor: pointer;
-  }
+
 
   .output {
     background: #E5E7EB;
