@@ -1,6 +1,6 @@
 <?php
 
-require_once "./api/dbConfig.php";
+require_once getcwd() . "/api/dbConfig.php";
 
 
 class Database
