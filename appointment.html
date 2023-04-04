@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Appointment Finder</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="New.html">New</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <h1 class="text-center">Appointment</h1>
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-8 col-sm-12">
+                <form id="appointment-form">
+                    <div class="mb-3">
+                        <h2>Meeting</h2>
+                    </div>
+
+                    <div class="doodle-container" onclick="toggleCheckbox(event)">
+                        <div class="center">
+                            <label class="doodle-checkbox">
+                                <input type="checkbox" class="doodle-input" />
+                                <span class="custom-checkbox"></span>
+                            </label>
+                        </div>
+                        <div class="option-text">
+                            <span><b>01.02.2023</b></span></br>
+                            <span id="time">10:00 - 12:00</span>
+                        </div>
+                    </div>
+
+                    <div class="doodle-container" onclick="toggleCheckbox(event)">
+                        <div class="center">
+                            <label class="doodle-checkbox">
+                                <input type="checkbox" class="doodle-input" />
+                                <span class="custom-checkbox"></span>
+                            </label>
+                        </div>
+                        <div class="option-text">
+                            <span><b>01.02.2023</b></span></br>
+                            <span id="time">10:00 - 12:00</span>
+                        </div>
+                    </div>
+
+                    <div class="doodle-container" onclick="toggleCheckbox(event)">
+                        <div class="center">
+                            <label class="doodle-checkbox">
+                                <input type="checkbox" class="doodle-input" />
+                                <span class="custom-checkbox"></span>
+                            </label>
+                        </div>
+                        <div class="option-text">
+                            <span><b>01.02.2023</b></span></br>
+                            <span id="time">10:00 - 12:00</span>
+                        </div>
+                    </div>
+
+                    <div class="doodle-container" onclick="toggleCheckbox(event)">
+                        <div class="center">
+                            <label class="doodle-checkbox">
+                                <input type="checkbox" class="doodle-input" />
+                                <span class="custom-checkbox"></span>
+                            </label>
+                        </div>
+                        <div class="option-text">
+                            <span><b>01.02.2023</b></span></br>
+                            <span id="time">10:00 - 12:00</span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                    </div>
+                </form>
+                <div class="mb-3">
+                    <label for="comments" class="form-label">Kommentar</label>
+                    <textarea class="form-control" id="comments" name="comments"></textarea>
+                    <div class="d-grid gap-2 mt-3 d-md-flex justify-content-md-end">
+                        <button class="btn btn-primary" type="button">Speichern</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
