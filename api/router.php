@@ -96,6 +96,27 @@ class Router
         return $this->requestDetails;
     }
 
+    public function successResponse($message, $data = null, $statusCode = 200)
+    {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'success',
+            'message' => $message,
+            'data' => $data,
+        ]);
+        exit();
+    }
+
+    public function errorResponse($message, $statusCode = 400)
+    {
+        header('Content-Type: application/json');
+        echo json_encode([
+            'status' => 'error',
+            'message' => $message,
+        ]);
+        exit();
+    }
+
     public function dispatch(string $url, string $requestMethod)
     {
         $url = str_replace($this->baseURL, "", $url);
