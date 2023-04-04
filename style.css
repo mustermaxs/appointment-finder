@@ -132,3 +132,7 @@ body {
     background-color: #d9e8fd;
     transition: all .2s ease;
   }
+
+  .timepicker {
+    text-align:center !important;
+  }
