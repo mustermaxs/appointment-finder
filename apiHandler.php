@@ -10,6 +10,9 @@ require_once "./api/router.php";
 $controllerPathPrefix = "./api/controllers/";
 $router = new Router("/appointment-finder");
 
+$router->post("/api/appointment/");
+$router->get("/api/appointment/:id");
+$router->get("/api/appointment/");
 $router->post("/api/user/");
 $router->get("/api/user/:id/");
 $router->post("/api/comment/");

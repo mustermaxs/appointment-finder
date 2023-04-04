@@ -11,11 +11,20 @@ class AppointmentController extends BaseController
 
     public function get()
     {
-        if (array_key_exists("id", $this->request)) {
+        if (array_key_exists("id", $this->request)) 
+        {
             $appointmentId = $this->request["id"];
             $appointment = $this->model->getAppointmentById($appointmentId);
+            
+            if($appointment == NULL)
+            {
+                $this->errorResponse("No Appointment found!", $appointment);
+                return;
+            }
             $this->successResponse("", $appointment);
-        } else {
+
+        } else 
+        {
             $appointments = $this->model->getAllAppointments();
             $this->successResponse("", $appointments);
         }
@@ -23,12 +32,26 @@ class AppointmentController extends BaseController
 
     private function getOptionsById($appointmentId)
     {
+
         $options = $this->model->getOptionsById($appointmentId);
         return $options;
     }
-    // TODO
+
     public function post()
     {
-        $data = $this->getPostData();
+
+        $jsonPostData = $this->getPostData();
+
+        $title = $jsonPostData->title;
+        $appointmentDate = $jsonPostData->appointmentDate;
+        $expirationDate = $jsonPostData->expirationDate;
+        $location = $jsonPostData->location;
+        $description = $jsonPostData->description;
+        $userId = $jsonPostData->userId;
+        $password = $jsonPostData->password;
+
+        $appointment = $this->model->addAppointment($title, $appointmentDate, $expirationDate, $location, $description, $userId, $password);
+        $this->successResponse("", $appointment);
+
     }
 }
