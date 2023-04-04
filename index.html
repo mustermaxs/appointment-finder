@@ -27,58 +27,27 @@
                         <a class="nav-link active" href="index.html">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="New.html">New</a>
+                        <a class="nav-link" href="new.html">New</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+    <div class="container mt-4">
         <h1 class="text-center mt-5">Appointments</h1>
 
-        <div class="row mt-5">
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header p-3 text-black">
-                        <h5 class="card-title mb-0">Appointment 1</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Status: open</p>
-                        <p class="card-text">open till: 03.06.2023</p>
-                        <a href="appointment.html" class="btn btn-success">more...</a>
-                    </div>
-                </div>
+        <div class="row mt-5 justify-content-center">
+            <div id="spinner" class="spinner-border text-primary" role="status">
             </div>
-
-            <div class="col-md-6">
-                <div class="card mb-3">
-                    <div class="card-header p-3 text-black">
-                        <h5 class="card-title mb-0">Appointment 2</h5>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Status: voted</p>
-                        <p class="card-text">open till: 03.06.2023</p>
-                        <a href="#" class="btn btn-success">Vote</a>
-                    </div>
-                </div>
-            </div>
+            <!-- cards added here -->
         </div>
     </div>
 
 </body>
-<script>
-    //ZUM TESTEN DER AJAX REQUESTS:
-    $.ajax({
-        type: "GET",
-        url: "./api/user/1/",
-        dataType: 'json', // added data type
-        success: function (res) {
-            console.log(res);
-            alert(res);
-        }
-    });
-</script>
-<script src="script.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+<script src="index.js"></script>
 
 </html>
