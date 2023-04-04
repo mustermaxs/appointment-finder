@@ -1,12 +1,19 @@
 <?php
+ini_set('error_reporting', E_ALL);
+
+
 require_once "./api/router.php";
 // require_once "./api/models/UserModel.php";
-require_once "./api/controllers/UserController.php";
+// require_once "./api/controllers/UserController.php";
+// require_once "./api/controllers/CommentController.php";
 
+$controllerPathPrefix = "./api/controllers/";
 $router = new Router("/appointment-finder");
 
 $router->post("/api/user/");
 $router->get("/api/user/:id/");
+$router->post("/api/comment/");
+$router->get("/api/comment/:id/");
 
 
 $url = $_SERVER["REQUEST_URI"];
@@ -19,7 +26,13 @@ if (!$router->routeExists())
 
 $request = $router->request();
 
-$controller = new UserController($request);
-$controller->get();
+$controllerName = $request["controller"];
+$controllerClassName = ucfirst($controllerName) . "Controller";
+$controllerPath = $controllerPathPrefix . $controllerClassName . ".php";
+$controllerAction = strtolower($method);
 
-// var_dump($router->request());
+if (file_exists($controllerPath)) {
+    require_once $controllerPath;
+    $controller = new $controllerClassName($request);
+    $controller->$controllerAction();
+}
