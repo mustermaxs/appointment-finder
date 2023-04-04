@@ -20,7 +20,7 @@ class UserController extends BaseController
 
     public function post()
     {
-        $$jsonPostData = $this->getPostData();
+        $jsonPostData = $this->getPostData();
         $username = $jsonPostData->userName;
         $email = $jsonPostData->email;
         $this->model->addUser($username, $email);
