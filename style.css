@@ -127,3 +127,11 @@ body {
   .timepicker {
     text-align:center !important;
   }
+
+  #userName-wrapper {
+    margin: 2rem 0rem 2rem 0rem !important;
+  }
+
+hr {
+  color: rgb(128 128 128);
+}
