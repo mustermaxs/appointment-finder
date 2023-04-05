@@ -1,3 +1,20 @@
+function formatDate(inputDate) {
+  const date = new Date(inputDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+
+  return `${day}.${month}.${year}`;
+}
+
+function formatHours(inputDate) {
+  const date = new Date(inputDate);
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+
+  return `${hours}:${minutes}`;
+}
+
 function getAppointmentIdFromURL() {
   var hashRaw = document.location.hash;
   var hash = hashRaw.split("#")[1];
@@ -48,8 +65,8 @@ function renderAppointment(appointmentId) {
                 </label>
             </div>
             <div class="option-text">
-                <span><b>${option.dateOption}</b></span></br>
-                <span id="time">??? fehlt noch</span>
+                <span><b>${formatDate(option.startDate)}</b></span></br>
+                <span id="time">${formatHours(option.startDate)} - ${formatHours(option.endDate)}</span>
             </div>
         </div>`);
       });

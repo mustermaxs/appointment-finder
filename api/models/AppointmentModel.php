@@ -48,17 +48,34 @@ class AppointmentModel extends Model
         return $options;
     }
 
-    public function addAppointment($title, $appointmentDate, $expirationDate, $location, $description, $userId, $password)
+    public function addOptionsByAppointmentId($appointmentId, $options)
+    {
+        $query = "INSERT INTO options (appointmentId, startDate, endDate) VALUES (?, ?, ?)";
+        $stmt = $this->conn->prepare($query);
+    
+        foreach ($options as $option) {
+            $startDate = $option->startDate;
+            $endDate = $option->endDate;
+    
+            $stmt->bind_param("dss", $appointmentId, $startDate, $endDate);
+            $stmt->execute();
+        }
+    }
+    
+
+    public function addAppointment($title, $expirationDate, $location, $description, $userId, $options, $password)
     {
         $query =
             "INSERT INTO appointments
-        (title, appointmentDate, expirationDate, location, description, creator, password)
-        VALUES(?,?,?,?,?,?,?);";
+        (title, expirationDate, location, description, creator, password)
+        VALUES(?,?,?,?,?,?);";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sssssds", $title, $appointmentDate, $expirationDate, $location, $description, $userId, $password);
+        $stmt->bind_param("ssssds", $title, $expirationDate, $location, $description, $userId, $password);
         $stmt->execute();
         $appointmentId = $this->conn->insert_id;
+
+        $this->addOptionsByAppointmentId($appointmentId, $options);
 
     return $appointmentId;
     }
