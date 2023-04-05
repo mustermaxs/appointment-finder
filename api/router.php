@@ -52,6 +52,7 @@ class Router
     {
         $regexPattern = preg_replace("/\//", "\\/", $path);
         $regexPattern = preg_replace('/\:([a-z0-9-]+)/', '(?\'\1\'[a-z-_0-9]+)', $regexPattern);
+        // $regexPattern = preg_replace("/\/$/", , $regexPattern);
         $regexPattern = "/^" . $regexPattern . "\/?$/";
 
         return $regexPattern;
@@ -121,6 +122,13 @@ class Router
     {
         $url = str_replace($this->baseURL, "", $url);
         $method = strtoupper($requestMethod);
+
+        if ($requestMethod == "GET") {
+            foreach ($_GET as $key => $value) {
+                $this->addRequest($key, $value);
+            }
+        }
+        $url = preg_replace('/\\?.*/', '', $url);
 
         if (!$this->matchRoute($this->routes[$method], $url)) {
             $this->routeexists = false;
