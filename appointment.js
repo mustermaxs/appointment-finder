@@ -44,8 +44,16 @@ function toggleCheckbox(event, optionId) {
 
   checkbox.checked = !checkbox.checked;
 
-  if (checkbox.checked)
+  if (checkbox.checked) {
     selectedOptions.push(optionId);
+  } else {
+    const index = selectedOptions.indexOf(optionId);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    }
+  }
+
+  console.log(selectedOptions)
 }
 
 function renderAppointment(appointmentId) {
