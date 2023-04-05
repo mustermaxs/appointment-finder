@@ -112,7 +112,7 @@ body {
     transform: rotate(45deg);
   }
   
-  .option-text {
+  .doodle-container .option-text {
     padding-top: 30px;
     text-align: center;
   }
@@ -135,3 +135,41 @@ body {
 hr {
   color: rgb(128 128 128);
 }
+
+
+
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0; /* hide initially */
+  transition: all .2s ease;
+}
+
+.option-container {
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  background-color: #fefefe;
+  transition: all .2s ease;
+  position: relative; /* needed for absolute positioning */
+  user-select: none;
+}
+
+.option-text {
+  text-align: center;
+}
+
+.option-container:hover {
+  color: transparent;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.option-container:hover .overlay {
+  opacity: 1;
+}
+  

@@ -49,10 +49,10 @@ class AppointmentController extends BaseController
         $location = $jsonPostData->location;
         $description = $jsonPostData->description;
         $userId = $jsonPostData->userId;
-        $password = $jsonPostData->password;
+        // $password = $jsonPostData->password;
         $options = $jsonPostData->options;
 
-        $appointmentId = $this->model->addAppointment($title, $expirationDate, $location, $description, $userId, $options, $password);
+        $appointmentId = $this->model->addAppointment($title, $expirationDate, $location, $description, $userId, $options);
         $this->successResponse("", $appointmentId);
     }
 }
