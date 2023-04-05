@@ -67,8 +67,8 @@ function renderAppointment(appointmentId) {
             <div class="option-text">
                 <span><b>${formatDate(option.startDate)}</b></span></br>
                 <span id="time">${formatHours(
-          option.startDate
-        )} - ${formatHours(option.endDate)}</span>
+                  option.startDate
+                )} - ${formatHours(option.endDate)}</span>
             </div>
         </div>`);
       });
@@ -177,7 +177,7 @@ async function handleFormSubmit(ev) {
 
   try {
     var userId = await getUserIdByUserName(userName);
-    var appointmentId = getAppointmentIdFromURL();
+    var appointmentId = getAppointmentId();
 
     postComment(appointmentId, userId);
   } catch (error) {
@@ -185,12 +185,8 @@ async function handleFormSubmit(ev) {
   }
 }
 
-function getUserName() {
-  return $("#userName").val().trim();
-}
-
 $(document).ready(function () {
-  var appointmentId = getAppointmentIdFromURL();
+  var appointmentId = getAppointmentId();
   renderAppointment(appointmentId);
   renderComments(appointmentId);
 
