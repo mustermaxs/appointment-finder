@@ -135,3 +135,28 @@ body {
 hr {
   color: rgb(128 128 128);
 }
+
+.removeBtn {
+  z-index: 10;
+  display: flex;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 100%;
+  color: darkgray;
+  font-size: 0.9rem;
+  position: absolute;
+  font-weight: bold;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid transparent;
+  transform: translate(-5px, -6px);
+  background-color: white;
+  box-shadow: 0px 0px 2px black;
+  transition: all 100ms;
+}
+
+.removeBtn:hover {
+  background-color: rgb(255, 126, 126);
+  color: white;
+  box-shadow: none;
+}
