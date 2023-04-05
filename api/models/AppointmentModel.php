@@ -18,7 +18,7 @@ class AppointmentModel extends Model
 
         return password_verify($pwdInput, $hashedpassword);
     }
-    // TODO
+    // ! select everything but password
     public function getAppointmentById($appointmentId)
     {
         $query = "SELECT * FROM appointments WHERE appointmentId = ?";
@@ -27,6 +27,10 @@ class AppointmentModel extends Model
         $stmt->execute();
 
         $result = $stmt->get_result();
+
+        if ($result->num_rows <= 0)
+            return null;
+
         $appointment = (object) $result->fetch_assoc();
         $appointment->options = $this->getOptionsById($appointmentId);
 
@@ -48,6 +52,10 @@ class AppointmentModel extends Model
         return $options;
     }
 
+    public function addVoteByOptionId($optionId, $userId)
+    {
+    }
+
     public function addAppointment($title, $appointmentDate, $expirationDate, $location, $description, $userId, $password)
     {
         $query =
@@ -60,7 +68,7 @@ class AppointmentModel extends Model
         $stmt->execute();
         $appointmentId = $this->conn->insert_id;
 
-    return $appointmentId;
+        return $appointmentId;
     }
 
     public function getAllAppointments()

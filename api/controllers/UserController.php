@@ -10,8 +10,25 @@ class UserController extends BaseController
         $this->model = new UserModel();
     }
 
+    public function getUserIdByUserName(string $userName)
+    {
+        $userId = 0;
+
+        $userId = $this->model->getUserIdByUserName($userName);
+        if ($userName == null) {
+            $userId = $this->model->addUser($userName, "");
+        }
+
+        $this->successResponse("request successfull", $userId);
+    }
+
     public function get()
     {
+        if (array_key_exists("username", $this->request)) {
+            $this->getUserIdByUserName($this->request["username"]);
+
+            return;
+        }
         $userId = $this->request["id"];
         $user = $this->model->getUserById($userId);
 

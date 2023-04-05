@@ -20,6 +20,22 @@ class UserModel extends Model
         return $user;
     }
 
+    public function getUserIdByUserName(string $userName)
+    {
+        $query =
+            "SELECT userId, userName
+        FROM users
+        WHERE userName = ?;";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("s", $userName);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_array(MYSQLI_ASSOC);
+
+        return $user;
+    }
+
     public function addUser(string $userName, string $email)
     {
         $query =
