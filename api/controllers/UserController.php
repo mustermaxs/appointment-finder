@@ -22,17 +22,27 @@ class UserController extends BaseController
         $this->successResponse("request successfull", $userId);
     }
 
-    public function get()
+    protected function getUserNameByUserId($userId)
     {
-        if (array_key_exists("username", $this->request)) {
-            $this->getUserIdByUserName($this->request["username"]);
-
-            return;
-        }
         $userId = $this->request["id"];
         $user = $this->model->getUserById($userId);
 
         $this->successResponse("SUCCESS!", $user);
+    }
+
+    public function get()
+    {
+        switch ($this->request["action"]) {
+            case "getid":
+                $this->getUserIdByUserName($this->request["username"]);
+                break;
+            case "getname":
+                $this->getUserNameByUserId($this->request["id"]);
+                break;
+            default:
+                $this->errorResponse("request malformed");
+                break;
+        }
     }
 
     public function post()
