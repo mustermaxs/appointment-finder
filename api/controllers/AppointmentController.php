@@ -44,21 +44,15 @@ class AppointmentController extends BaseController
 
         $jsonPostData = $this->getPostData();
 
-        if (array_key_exists("addvote", $jsonPostData)) {
-            $this->addVote($jsonPostData);
-
-            return;
-        }
-
         $title = $jsonPostData->title;
-        $appointmentDate = $jsonPostData->appointmentDate;
         $expirationDate = $jsonPostData->expirationDate;
         $location = $jsonPostData->location;
         $description = $jsonPostData->description;
         $userId = $jsonPostData->userId;
         $password = $jsonPostData->password;
+        $options = $jsonPostData->options;
 
-        $appointment = $this->model->addAppointment($title, $appointmentDate, $expirationDate, $location, $description, $userId, $password);
-        $this->successResponse("", $appointment);
+        $appointmentId = $this->model->addAppointment($title, $expirationDate, $location, $description, $userId, $options, $password);
+        $this->successResponse("", $appointmentId);
     }
 }
