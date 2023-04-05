@@ -1,3 +1,33 @@
+const colors = [
+  "#ff69eb",
+  "#ff86c8",
+  "#ffa3a5",
+  "#ffbf81",
+  "#ffdc5e",
+  "#343a40",
+  "#e71d36",
+  "#4f5d75",
+  "#89023e",
+];
+
+var userColorMap = {};
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getUserColor(userName) {
+  if (userName in userColorMap) return userColorMap[userName];
+
+  var randInt = getRandomInt(0, colors.length);
+  var color = colors[randInt];
+  userColorMap[userName] = color;
+
+  return color;
+}
+
 function formatDate(inputDate) {
   const date = new Date(inputDate);
   const year = date.getFullYear();
@@ -56,6 +86,8 @@ function renderAppointment(appointmentId) {
       container.append(`<div class="mb-3"><h2>${data.title}</h2></div>`);
 
       data.options.map((option) => {
+        var color = getUserColor("sebastian");
+
         container.append(`
             <div class="doodle-container" onclick="toggleCheckbox(event)">
             <div class="center">
@@ -70,7 +102,11 @@ function renderAppointment(appointmentId) {
                   option.startDate
                 )} - ${formatHours(option.endDate)}</span>
             </div>
-        </div>`);
+            <div class="votes-label-wrapper">
+            <div style="background: ${color}" title="Sebastian" class="voter-label">Sebastian</div>
+            </div>
+        </div>
+        `);
       });
     },
   });
@@ -106,7 +142,6 @@ function renderComments(appointmentId) {
 function postComment(appointmentId, userId) {
   var content = $("#newComment").val();
   content = content.trim();
-  // var content = userComment.val().trim();
 
   if (content == "") return;
 
@@ -147,6 +182,27 @@ function postVote(appointmentId, userName, optionId) {
       console.log(response);
     },
   });
+}
+
+function getVoteLablesString(appointmentId) {
+  const labelsString = async () => {
+    return new Promise((resolve, reject) => {
+      $.ajax({
+        url: `./api/user/`,
+        type: "GET",
+        data: { username: userName, action: "getid" },
+        contentType: "application/json",
+        success: ({ data }) => {
+          resolve(data.userId);
+        },
+        error: (error) => {
+          reject(error);
+        },
+      });
+    });
+  };
+
+  return labelsString();
 }
 
 function getUserIdByUserName(userName) {

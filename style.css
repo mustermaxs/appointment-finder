@@ -43,6 +43,7 @@ body {
     margin: 5px;
     background-color: #fefefe;
     transition: all .2s ease;
+    max-width: 17rem;
   }
 
   .doodle-container:hover {
@@ -174,3 +175,29 @@ hr {
   opacity: 1;
 }
   
+.votes-label-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  max-width: inherit;
+  margin-top: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+}
+
+.voter-label {
+  display: block;
+  max-width: 6rem;
+  font-size: 0.8rem;
+  background-color: blue;
+  color: white;
+  padding: 2px 7px;
+  border-radius: 25px;
+  margin-bottom: 4px;
+  text-align: center;
+  margin-left: 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  opacity: 0.8;
+}
