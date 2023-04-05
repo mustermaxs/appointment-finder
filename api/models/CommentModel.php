@@ -28,8 +28,10 @@ class CommentModel extends Model
         (content, userId, appointment)
         VALUES(?, ?, ?);";
 
+        $contentSanitized = filter_var($content, FILTER_SANITIZE_STRING);
+
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("sdd", $content, $userId, $appointmentId);
+        $stmt->bind_param("sdd", $contentSanitized, $userId, $appointmentId);
         $stmt->execute();
         $commentId = $this->conn->insert_id;
 

@@ -1,25 +1,36 @@
 let options = [];
+var optionsCount = 0;
 
 function formatDate(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
 
-    return `${year}-${month}-${day}`;
+  return `${year}-${month}-${day}`;
 }
 
 function formatDateWithHours(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
 
-    return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+  return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+}
+function removeOption(ev) {
+  var button = ev.target;
+  var optionId = button.dataset.optionid;
+  var doodleEl = ev.target.nextElementSibling;
+  var indexInArray = options.findIndex((option) => option.id == optionId);
+  options.splice(indexInArray, 1);
+  console.log(options);
+  button.remove();
+  doodleEl.remove();
 }
 
-
 $("#add-date").on("click", function () {
+
 
     const date = $("#datepicker").datepicker('getDate');
     const startDate = date?.setHours($('.start').timepicker('getTime').getHours());
@@ -142,7 +153,5 @@ $(document).ready(function () {
             error: (res) => console.log("ERROR:", res.responseText),
 
         });
-
     });
-
-});
+  });

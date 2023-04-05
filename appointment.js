@@ -15,7 +15,7 @@ function formatHours(inputDate) {
   return `${hours}:${minutes}`;
 }
 
-function getAppointmentIdFromURL() {
+function getAppointmentId() {
   var hashRaw = document.location.hash;
   var hash = hashRaw.split("#")[1];
   var appointmentId = hash.split("id=")[1];
@@ -102,18 +102,24 @@ function renderComments(appointmentId) {
   });
 }
 
-function postComment(appointmentId, userName) {
-  const userComment = $("#newComment");
-  var value = userComment.value.trim();
+function postComment(appointmentId, userId) {
+  var content = $("#newComment").val();
+  content = content.trim();
+  // var content = userComment.val().trim();
 
-  if (value == "") return;
+  if (content == "") return;
 
   $.ajax({
     type: "POST",
     url: "./api/comment/",
     dataType: "json",
     contentType: "application/json",
-    data: { content: value, appointmentId: appointmentId, userName: userName },
+    data: JSON.stringify({
+      content: content,
+      appointmentId: appointmentId,
+      userId: userId,
+    }),
+
     success: (response) => {
       console.log(response);
     },
@@ -141,10 +147,17 @@ function postVote(appointmentId, userName, optionId) {
 function getUserIdByUserName(userName) {
   const getId = async () => {
     return new Promise((resolve, reject) => {
-      $.get(`./api/user/${userName}`, ({ data }) => {
-        resolve(data.userId);
-      }).fail((error) => {
-        reject(error);
+      $.ajax({
+        url: `./api/user/`,
+        type: "GET",
+        data: { username: userName, action: "getid" },
+        contentType: "application/json",
+        success: ({ data }) => {
+          resolve(data.userId);
+        },
+        error: (error) => {
+          reject(error);
+        },
       });
     });
   };
@@ -153,7 +166,8 @@ function getUserIdByUserName(userName) {
 }
 
 // TODO
-async function handleFormSubmit() {
+async function handleFormSubmit(ev) {
+  ev.preventDefault();
   var userName = getUserName();
 
   if (userName == "") {
@@ -165,7 +179,7 @@ async function handleFormSubmit() {
     var userId = await getUserIdByUserName(userName);
     var appointmentId = getAppointmentIdFromURL();
 
-    postComment(appointmentId, userName);
+    postComment(appointmentId, userId);
   } catch (error) {
     console.error(error);
   }
@@ -180,5 +194,7 @@ $(document).ready(function () {
   renderAppointment(appointmentId);
   renderComments(appointmentId);
 
-  // $("#appointment-form").submit(handleFormSubmit);
+  $("#appointment-form").submit((ev) => {
+    handleFormSubmit(ev);
+  });
 });

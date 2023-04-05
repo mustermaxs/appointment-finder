@@ -15,7 +15,7 @@ class UserController extends BaseController
         $userId = 0;
 
         $userId = $this->model->getUserIdByUserName($userName);
-        if ($userName == null) {
+        if ($userId == null) {
             $userId = $this->model->addUser($userName, "");
         }
 
@@ -40,9 +40,10 @@ class UserController extends BaseController
                 $this->getUserNameByUserId($this->request["id"]);
                 break;
             default:
-                $this->errorResponse("request malformed");
+                $this->getUserNameByUserId($this->request["id"]);
                 break;
         }
+        $this->errorResponse("request malformed");
     }
 
     public function post()
