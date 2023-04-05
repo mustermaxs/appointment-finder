@@ -1,3 +1,5 @@
+let selectedOptions = [];
+
 function formatDate(inputDate) {
   const date = new Date(inputDate);
   const year = date.getFullYear();
@@ -23,7 +25,9 @@ function getAppointmentId() {
   return appointmentId;
 }
 
-function toggleCheckbox(event) {
+function toggleCheckbox(event, optionId) {
+  event.preventDefault();
+
   const target = event.target;
   if (target.tagName === "LABEL") {
     return;
@@ -39,7 +43,9 @@ function toggleCheckbox(event) {
   }
 
   checkbox.checked = !checkbox.checked;
-  event.preventDefault();
+
+  if (checkbox.checked)
+    selectedOptions.push(optionId);
 }
 
 function renderAppointment(appointmentId) {
@@ -57,7 +63,7 @@ function renderAppointment(appointmentId) {
 
       data.options.map((option) => {
         container.append(`
-            <div class="doodle-container" onclick="toggleCheckbox(event)">
+            <div class="doodle-container" id="${option.optionId}" onclick="toggleCheckbox(event, ${option.optionId})">
             <div class="center">
                 <label class="doodle-checkbox">
                     <input type="checkbox" class="doodle-input" />
@@ -67,8 +73,8 @@ function renderAppointment(appointmentId) {
             <div class="option-text">
                 <span><b>${formatDate(option.startDate)}</b></span></br>
                 <span id="time">${formatHours(
-                  option.startDate
-                )} - ${formatHours(option.endDate)}</span>
+          option.startDate
+        )} - ${formatHours(option.endDate)}</span>
             </div>
         </div>`);
       });
@@ -89,7 +95,9 @@ function renderComments(appointmentId) {
     success: ({ data }) => {
       const container = $("#commentsection");
 
-      data.map((comment) => {
+      const reversedData = data.reverse();
+
+      reversedData.map((comment) => {
         container.append(`
         <div class="comment">
         <h4 class="userName">${comment.userName}</h4> <span class="writtenOn">${comment.createdOn}</span>
@@ -123,7 +131,7 @@ function postComment(appointmentId, userId) {
 
     success: (response) => {
       console.log(response);
-      $("#commentsection").innerHtml = "";
+      $("#commentsection").empty();
       renderComments(appointmentId);
       $("textarea").val("");
       $("#userName").val("");
@@ -134,12 +142,12 @@ function postComment(appointmentId, userId) {
   });
 }
 
-function postVote(appointmentId, userName, optionId) {
+function postVote(appointmentId, userId, optionId) {
   $.ajax({
     type: "POST",
     url: "./api/vote/",
     contentType: "application/json",
-    data: { appointmentId, optionId, userName },
+    data: JSON.stringify({ appointmentId, userId, optionId }),
     success: (response) => {
       console.log(response);
     },
@@ -188,6 +196,22 @@ async function handleFormSubmit(ev) {
   } catch (error) {
     console.error(error);
   }
+
+  try {
+    var userId = await getUserIdByUserName(userName);
+    var appointmentId = getAppointmentId();
+
+    selectedOptions.forEach((optionId) => {
+
+      postVote(appointmentId, userId, optionId);
+
+    })
+
+
+  } catch (error) {
+    console.error(error);
+  }
+
 }
 
 $(document).ready(function () {
@@ -195,7 +219,6 @@ $(document).ready(function () {
   renderAppointment(appointmentId);
   renderComments(appointmentId);
 
-  $("#appointment-form").submit((ev) => {
-    handleFormSubmit(ev);
-  });
+  $("#appointment-form").submit((ev) => handleFormSubmit(ev))
+
 });

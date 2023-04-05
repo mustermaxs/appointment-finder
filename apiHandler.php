@@ -14,6 +14,8 @@ $router->get("/api/user/:id/");
 $router->get("/api/user/");
 $router->post("/api/comment/");
 $router->get("/api/comment/:id/");
+$router->post("/api/vote/");
+$router->get("/api/vote/:id/");
 
 
 $url = $_SERVER["REQUEST_URI"];
