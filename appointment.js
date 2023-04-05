@@ -85,6 +85,7 @@ function renderComments(appointmentId) {
     url: `./api/comment/${appointmentId}/`,
     dataType: "json",
     beforeSend: () => spinner.show(),
+    complete: () => spinner.hide(),
     success: ({ data }) => {
       const container = $("#commentsection");
 
@@ -122,6 +123,10 @@ function postComment(appointmentId, userId) {
 
     success: (response) => {
       console.log(response);
+      $("#commentsection").innerHtml = "";
+      renderComments(appointmentId);
+      $("textarea").val("");
+      $("#userName").val("");
     },
     onerror: (response) => {
       console.log(response);
