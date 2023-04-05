@@ -168,7 +168,7 @@ function getUserIdByUserName(userName) {
 // TODO
 async function handleFormSubmit(ev) {
   ev.preventDefault();
-  var userName = getUserName();
+  var userName = $("#userName").val().trim();
 
   if (userName == "") {
     alert("Please enter a username");
