@@ -11,6 +11,7 @@ $router->get("/api/appointment/:id");
 $router->get("/api/appointment/");
 $router->post("/api/user/");
 $router->get("/api/user/:id/");
+$router->get("/api/user/");
 $router->post("/api/comment/");
 $router->get("/api/comment/:id/");
 
@@ -20,7 +21,6 @@ $method = $_SERVER["REQUEST_METHOD"];
 
 $router->dispatch($url, $method);
 
-// TODO respond with error message
 if (!$router->routeExists())
     $router->errorResponse("route doesn't exist", 400);
 
@@ -31,7 +31,6 @@ $controllerClassName = ucfirst($controllerName) . "Controller";
 $controllerPath = $controllerPathPrefix . $controllerClassName . ".php";
 $controllerAction = strtolower($method);
 
-// TODO respond with error msg
 if (file_exists($controllerPath)) {
     require_once $controllerPath;
     $controller = new $controllerClassName($request);
