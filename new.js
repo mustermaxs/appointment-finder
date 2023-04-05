@@ -30,110 +30,128 @@ function removeOption(ev) {
 }
 
 $("#add-date").on("click", function () {
-  const date = $("#datepicker").datepicker("getDate");
-  const day = date.getDate().toString().padStart(2, "0");
-  const month = (date.getMonth() + 1).toString().padStart(2, "0");
-  const year = date.getFullYear().toString();
 
-  const startDate = date.setHours($(".start").timepicker("getTime").getHours());
-  const startDateString =
-    $(".start").timepicker("getTime").getHours().toString().padStart(2, "0") +
-    ":00";
 
-  const endDate = date.setHours($(".end").timepicker("getTime").getHours());
-  const endDateString =
-    $(".end").timepicker("getTime").getHours().toString().padStart(2, "0") +
-    ":00";
+    const date = $("#datepicker").datepicker('getDate');
+    const startDate = date?.setHours($('.start').timepicker('getTime').getHours());
+    const startDateString = $('.start').timepicker('getTime').getHours().toString().padStart(2, '0') + ":00";
 
-  options.push({
-    startDate: formatDateWithHours(new Date(startDate)),
-    endDate: formatDateWithHours(new Date(endDate)),
-    id: optionsCount,
-  });
+    const endDate = date?.setHours($('.end').timepicker('getTime').getHours());
+    const endDateString = $('.end').timepicker('getTime').getHours().toString().padStart(2, '0') + ":00";
 
-  // If all inputs are valid, add a new date to the list
-  if (date && startDate && endDate) {
-    const listItem = `
-    <div>
-    <button type="button" data-optionid="${optionsCount}" onclick="removeOption(event)" class="removeBtn">X</button>
-    <div class="doodle-container" onclick="toggleCheckbox(event)">
-    <div class="center">
-            <label class="doodle-checkbox">
-            <input type="checkbox" class="doodle-input" />
-                <span class="custom-checkbox"></span>
-                </label>
-        </div>
-        <div class="option-text">
-            <span><b>${day}.${month}.${year}</b></span></br>
-            <span id="time">${startDateString} - ${endDateString}</span>
-            </div>
-            </div>
-            </div>`;
+    if (date && startDate && endDate) {
 
-    optionsCount++;
-    // Add the new item to the list
-    $("#checkbox-list").append(listItem);
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear().toString();
 
-    // Reset the input fields
-    $(".date").val("");
-    $(".start, .end").val("00:00");
-  }
+
+
+        const option = {
+            startDate: formatDateWithHours(new Date(startDate)),
+            endDate: formatDateWithHours(new Date(endDate)),
+            day: day,
+            month: month,
+            year: year,
+            startDateString: startDateString,
+            endDateString: endDateString
+        };
+
+        options.push(option);
+
+        sortOptions();
+        renderOptions();
+
+        resetInputFields();
+
+    }
+
 });
 
-function toggleCheckbox(event) {
-  const target = event.target;
-  if (target.tagName === "LABEL") {
-    return;
-  }
+function resetInputFields() {
+    $(".date").val("");
+    $(".start, .end").val("00:00");
+}
 
-  let checkbox;
-  if (target.tagName === "INPUT") {
-    checkbox = target;
-  } else {
-    checkbox = target
-      .closest(".doodle-container")
-      .querySelector(".doodle-input");
-  }
+function sortOptions() {
+    options.sort((a, b) => {
+        if (a.startDate < b.startDate) {
+            return -1;
+        }
+        if (a.startDate > b.startDate) {
+            return 1;
+        }
+        return 0;
+    });
+}
 
-  checkbox.checked = !checkbox.checked;
-  event.preventDefault();
+
+function renderOptions() {
+    $("#checkbox-list").html("");
+
+    options.forEach((option, index) => {
+        const listItem = `
+        <div class="option-container" id="${index}" onclick="deleteItem(${index})">
+          <div class="option-text">
+          <span><b>${option.day}.${option.month}.${option.year}</b></span></br>
+          <span id="time">${option.startDateString} - ${option.endDateString}</span>
+          </div>
+          <div class="overlay">
+            <img src="img/trash.png" width="25rem" alt="Delete" >
+          </div>
+        </div>
+      `;
+        $("#checkbox-list").append(listItem);
+    });
+}
+
+function deleteItem({ index }) {
+
+    $('#' + index).remove();
+
+    options.splice(index, 1);
+
+    sortOptions();
+    renderOptions();
 }
 
 $(document).ready(function () {
-  $("#datepicker").datepicker({
-    inline: true,
-    startDate: new Date(),
-  });
 
-  $(".timepicker").timepicker({
-    timeFormat: "HH:mm",
-    minTime: new Date(0, 0, 0, 8, 0, 0),
-    maxTime: new Date(0, 0, 0, 23, 0, 0),
-    startTime: new Date(0, 0, 0, 8, 0, 0),
-    interval: 60,
-  });
+    $("#datepicker").datepicker({
+        inline: true,
+        startDate: new Date(),
+    });
 
-  $("#appointment-form").submit((event) => {
-    event.preventDefault();
+    $('.timepicker').timepicker({
+        timeFormat: 'HH:mm',
+        minTime: new Date(0, 0, 0, 8, 0, 0),
+        maxTime: new Date(0, 0, 0, 23, 0, 0),
+        startTime: new Date(0, 0, 0, 8, 0, 0),
+        interval: 60,
+    });
 
-    $.ajax({
-      type: "POST",
-      url: "./api/appointment/",
-      dataType: "json",
-      data: JSON.stringify({
-        title: $("#title").val(),
-        expirationDate: $("#expiration-date").val(),
-        location: $("#location").val(),
-        description: $("#description").val(),
-        userId: 1,
-        password: $("#password").val(),
-        options: options,
-      }),
-      success: ({ data: appointmentId }) => {
-        window.location.href =
-          "/appointment-finder/appointment.html#id=" + appointmentId;
-      },
-      error: (res) => console.log("ERROR:", res.responseText),
+    $("#appointment-form").submit(event => {
+
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "./api/appointment/",
+            dataType: "json",
+            data: JSON.stringify({
+                "title": $("#title").val(),
+                "expirationDate": $("#expiration-date").val(),
+                "location": $("#location").val(),
+                "description": $("#description").val(),
+                "userId": 1,
+                // "password": $("#password").val(),
+                "options": options
+            }),
+            success: ({ data: appointmentId }) => {
+                window.location.href = "/appointment-finder/appointment.html#id=" + appointmentId;
+            },
+            error: (res) => console.log("ERROR:", res.responseText),
+
+        });
     });
   });
-});

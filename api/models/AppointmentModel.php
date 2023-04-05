@@ -71,15 +71,15 @@ class AppointmentModel extends Model
     }
 
 
-    public function addAppointment($title, $expirationDate, $location, $description, $userId, $options, $password)
+    public function addAppointment($title, $expirationDate, $location, $description, $userId, $options)
     {
         $query =
             "INSERT INTO appointments
-        (title, expirationDate, location, description, creator, password)
-        VALUES(?,?,?,?,?,?);";
+        (title, expirationDate, location, description, creator)
+        VALUES(?,?,?,?,?);";
 
         $stmt = $this->conn->prepare($query);
-        $stmt->bind_param("ssssds", $title, $expirationDate, $location, $description, $userId, $password);
+        $stmt->bind_param("ssssd", $title, $expirationDate, $location, $description, $userId);
         $stmt->execute();
         $appointmentId = $this->conn->insert_id;
 
