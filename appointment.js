@@ -177,7 +177,7 @@ async function handleFormSubmit(ev) {
 
   try {
     var userId = await getUserIdByUserName(userName);
-    var appointmentId = getAppointmentIdFromURL();
+    var appointmentId = getAppointmentId();
 
     postComment(appointmentId, userId);
   } catch (error) {
@@ -190,7 +190,7 @@ function getUserName() {
 }
 
 $(document).ready(function () {
-  var appointmentId = getAppointmentIdFromURL();
+  var appointmentId = getAppointmentId();
   renderAppointment(appointmentId);
   renderComments(appointmentId);
 
