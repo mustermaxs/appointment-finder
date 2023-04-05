@@ -6,7 +6,7 @@ function formatDateWithHours(inputDate) {
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
-  return `${year}.${month}.${day} ${hours}:${minutes}`;
+  return `${day}.${month}.${year} ${hours}:${minutes}`;
 }
 
 $(window).on("load", () => {
@@ -24,6 +24,20 @@ $(window).on("load", () => {
       const reversedData = data.reverse();
 
       reversedData.forEach((appointment) => {
+
+        const expirationDate = new Date(appointment.expirationDate);
+        const currentDate = new Date();
+        let expired = false;
+
+        if (currentDate > expirationDate) {
+          expired = true;
+        }
+
+        let expiredText = "expires on";
+        if (expired) {
+          expiredText = "expired on:";
+        }
+
         const cardHtml = `
                 <div class="col-md-6">
                   <div class="card mb-3">
@@ -31,9 +45,8 @@ $(window).on("load", () => {
                       <h5 class="card-title mb-0">${appointment.title}<span style="float:right; font-size:1rem" >${formatDateWithHours(appointment.createdOn)}</span></h5>
                     </div>
                     <div class="card-body">
-                      <p class="card-text">Status: ${appointment.status}</p>
-                      <p class="card-text">open till: ${appointment.expirationDate}</p>
-                      <a href="appointment.html#id=${appointment.appointmentId}" class="btn btn-success">vote</a>
+                      <p class="card-text" ${expired ? 'style="color:darkred"' : ''}>${expiredText} ${appointment.expirationDate}</p>
+                      <a href="appointment.html#id=${appointment.appointmentId}" class="btn btn-success">${expired ? 'details' : 'vote'}</a>
                     </div>
                   </div>
                 </div>
