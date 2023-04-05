@@ -1,4 +1,4 @@
-function getAppointmentIdFromURL() {
+function getAppointmentId() {
   var hashRaw = document.location.hash;
   var hash = hashRaw.split("#")[1];
   var appointmentId = hash.split("id=")[1];
@@ -34,7 +34,7 @@ function renderAppointment(appointmentId) {
     beforeSend: () => spinner.show(),
     complete: () => spinner.hide(),
     success: ({ data }) => {
-      const container = $("#appointment-form");
+      const container = $("#options-wrapper");
 
       container.append(`<div class="mb-3"><h2>${data.title}</h2></div>`);
 
@@ -59,16 +59,107 @@ function renderAppointment(appointmentId) {
 
 // TODO comments rendern
 function renderComments(appointmentId) {
-  //   $.ajax({
-  //     type: "GET",
-  //     url: `./api/appointment/${appointmentId}/`,
-  //     dataType: "json",
-  //     beforeSend: () => spinner.show(),
-  //     success: ({ data }) => {
-  //     },
-  //   });
+  const spinner = $("#spinner");
+
+  $.ajax({
+    type: "GET",
+    url: `./api/comment/${appointmentId}/`,
+    dataType: "json",
+    beforeSend: () => spinner.show(),
+    success: ({ data }) => {
+      const container = $("#commentsection");
+
+      data.map((comment) => {
+        container.append(`
+        <div class="comment">
+        <h4 class="userName">${comment.userName}</h4> <span class="writtenOn">${comment.createdOn}</span>
+        <p class="content">
+            <span>${comment.content}</span>
+        </p>
+    </div>
+        `);
+      });
+    },
+  });
 }
 
-var appointmentId = getAppointmentIdFromURL();
-renderAppointment(appointmentId);
-// renderComments(appointmentId);
+function postComment(appointmentId, userName) {
+  const userComment = $("#newComment");
+  var value = userComment.value.trim();
+
+  if (value == "") return;
+
+  $.ajax({
+    type: "POST",
+    url: "./api/comment/",
+    dataType: "json",
+    contentType: "application/json",
+    data: { content: value, appointmentId: appointmentId, userName: userName },
+    success: (response) => {
+      console.log(response);
+    },
+    onerror: (response) => {
+      console.log(response);
+    },
+  });
+}
+
+function postVote(appointmentId, userName, optionId) {
+  $.ajax({
+    type: "POST",
+    url: "./api/vote/",
+    contentType: "application/json",
+    data: { appointmentId, optionId, userName },
+    success: (response) => {
+      console.log(response);
+    },
+    onerror: (response) => {
+      console.log(response);
+    },
+  });
+}
+
+function getUserIdByUserName(userName) {
+  const getId = async () => {
+    return new Promise((resolve, reject) => {
+      $.get(`./api/user/${userName}`, ({ data }) => {
+        resolve(data.userId);
+      }).fail((error) => {
+        reject(error);
+      });
+    });
+  };
+
+  return getId();
+}
+
+// TODO
+async function handleFormSubmit() {
+  var userName = getUserName();
+
+  if (userName == "") {
+    alert("Please enter a username");
+    return;
+  }
+
+  try {
+    var userId = await getUserIdByUserName(userName);
+    var appointmentId = getAppointmentId();
+
+    postComment(appointmentId, userName);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+function getUserName() {
+  return $("#userName").val().trim();
+}
+
+$(document).ready(function () {
+  var appointmentId = getAppointmentId();
+  renderAppointment(appointmentId);
+  renderComments(appointmentId);
+
+  // $("#appointment-form").submit(handleFormSubmit);
+});
