@@ -11,20 +11,16 @@ class AppointmentController extends BaseController
 
     public function get()
     {
-        if (array_key_exists("id", $this->request)) 
-        {
+        if (array_key_exists("id", $this->request)) {
             $appointmentId = $this->request["id"];
             $appointment = $this->model->getAppointmentById($appointmentId);
-            
-            if($appointment == NULL)
-            {
+
+            if ($appointment == NULL) {
                 $this->errorResponse("No Appointment found!", $appointment);
                 return;
             }
             $this->successResponse("", $appointment);
-
-        } else 
-        {
+        } else {
             $appointments = $this->model->getAllAppointments();
             $this->successResponse("", $appointments);
         }
@@ -37,10 +33,22 @@ class AppointmentController extends BaseController
         return $options;
     }
 
+    public function addVote($data)
+    {
+        $this->model->addVoteByOptionId($data->optionId, $data->userId);
+        $this->successResponse("added voting");
+    }
+
     public function post()
     {
 
         $jsonPostData = $this->getPostData();
+
+        if (array_key_exists("addvote", $jsonPostData)) {
+            $this->addVote($jsonPostData);
+
+            return;
+        }
 
         $title = $jsonPostData->title;
         $appointmentDate = $jsonPostData->appointmentDate;
@@ -52,6 +60,5 @@ class AppointmentController extends BaseController
 
         $appointment = $this->model->addAppointment($title, $appointmentDate, $expirationDate, $location, $description, $userId, $password);
         $this->successResponse("", $appointment);
-
     }
 }
