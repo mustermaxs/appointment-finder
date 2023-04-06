@@ -243,19 +243,18 @@ hr {
 .infobutton {
   cursor: pointer;
   z-index: 10;
-  width: 1rem;
-  height: 1rem;
-  background-color: gray;
+  width: 1.4rem;
+  height: 1.4rem;
+  background-color: #0d6efd;
   color: white;
   font-size: 0.9rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bold;
+  font-weight: 400;
   border-radius: 100%;
   position: relative;
-  transform: translate(13px, 26px);
-  font-family: 'Times New Roman', Times, serif;
+  transform: translate(12px, 31px);
 }
 
 .closeInfobox {

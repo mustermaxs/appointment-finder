@@ -153,7 +153,9 @@ async function renderAppointment(appointmentId) {
         ${voterLabels}
         </div>
         </div>
-        <div class="infobutton" id="infobutton-${option.optionId}">i</div>
+        <div class="infobutton" id="infobutton-${option.optionId}">${
+          option.votes.length
+        }</div>
             <div class="doodle-container ${isExpired}-container ${
           isExpired &&
           option.optionId == mostVotedOptionId &&
