@@ -21,8 +21,31 @@ class VoteModel extends Model
         return $votes;
     }
 
+    protected function userHasAlreadyVoted($userId, $optionId)
+    {
+        $alreadyVoted = false;
+
+        $query =
+            "SELECT voteId FROM votes
+        WHERE optionId = ? AND userId = ?;";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bind_param("dd", $optionId, $userId);
+        $stmt->execute();
+        $res = $stmt->get_result();
+        $row = $res->fetch_assoc();
+        $voteId = $row['voteId'];
+
+        $alreadyVoted = $voteId > 0 ? true : false;
+
+        return $alreadyVoted;
+    }
+
     public function addVoteByAppointmentId(int $optionId, int $userId, int $appointmentId)
     {
+        if ($this->userHasAlreadyVoted($userId, $optionId))
+            return null;
+
         $query =
             "INSERT INTO votes
         (optionId, userId, appointmentId)

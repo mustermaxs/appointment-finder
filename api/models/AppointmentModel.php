@@ -43,7 +43,8 @@ class AppointmentModel extends Model
             $appointment->options[$optionIndex]["votes"] = array();
 
             for ($voteIndex = 0; $voteIndex < count($votes); $voteIndex++) {
-                if ($appointment->options[$optionIndex]->optionId == $votes[$voteIndex]->optionId)
+
+                if ($appointment->options[$optionIndex]["optionId"] === $votes[$voteIndex]["optionId"])
                     array_push($appointment->options[$optionIndex]["votes"], $votes[$voteIndex]);
             }
         }
@@ -69,6 +70,7 @@ class AppointmentModel extends Model
     public function addVoteByOptionId($optionId, $userId)
     {
     }
+
 
     public function addOptionsByAppointmentId($appointmentId, $options)
     {
