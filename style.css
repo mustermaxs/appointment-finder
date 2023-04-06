@@ -183,12 +183,9 @@ hr {
   flex-direction: row;
   flex-wrap: wrap;
   background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 5px;
   padding: 10px;
   margin: 5px;
-  max-width: var(--option-container-width);
-
+  max-width: 100%;
 }
 
 .expired-container:hover {
@@ -220,13 +217,12 @@ hr {
 
 #options-container {
   display: flex;
-  overflow-x: auto;
-  min-height: fit-content;
-  /* flex-wrap: wrap; */
+  flex-wrap: wrap;
+  flex-direction: row;
 }
 
 .doodle-wrapper {
-  margin-bottom: 20px;
+  margin-bottom: -14px;
 }
 
 .info {
@@ -241,6 +237,7 @@ hr {
   position: fixed;
   transform: translate(-50%, -43%);
   left: 50%;
+  top: 33%;
 }
 
 .infobutton {
@@ -273,7 +270,6 @@ hr {
   color: gray;
   background: white;
   position: absolute;
-  /* transform: translate(130px, -2px); */
   border-top: none;
   border-right: none;
   border-left: 1px solid #ccc;
@@ -297,7 +293,7 @@ hr {
 
 @media only screen and (min-width: 600px) {
   .info {
-    width: 30%;
-    min-width: 30%;
+    width: 30rem;
+    min-width: 30rem;
   }
 }

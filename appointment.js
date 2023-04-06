@@ -125,28 +125,17 @@ async function renderAppointment(appointmentId) {
             voterLabelColor = assignLabelColor(vote.userName);
             voterLabels += `<div style="background: ${voterLabelColor}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
           });
+        } else {
+          voterLabels = "<span>No votes yet...</span>";
         }
-
         var optionEl = `
         <div class="doodle-wrapper">
         <div class="info" id="infobox-${option.optionId}">
         <button type="button" class="closeInfobox">x</button>
-        <div title="${data.title}" class="infobox-title"><h5>${
-          data.title
-        }</h5></div>
-        <hr>
-        <p>
-          <span class="detailCategory">Location: </span><span> ${
-            data.location
-          }</span> <br>
-          
-        <span class="detailCategory">Created on: </span>${
-          data.createdOn
-        }</span><br>
-        <span class="detailCategory">Description: </span>
-        <span>
-        ${data.description}</span> <br>
-        </p>
+        <div title="Votes" class="infobox-title"></div>
+        <div class="votes-label-wrapper">
+        ${voterLabels}
+        </div>
         </div>
         <div class="infobutton" id="infobutton-${option.optionId}">i</div>
             <div class="doodle-container ${isExpired}-container" id="${
@@ -166,28 +155,17 @@ async function renderAppointment(appointmentId) {
                   option.startDate
                 )} - ${formatHours(option.endDate)}</span>
             </div>
-</div>            `;
-        optionEl += showVotes
-          ? `<div class="votes-label-wrapper">
-${voterLabels}
-</div>`
-          : "";
-        optionEl += `</div>`;
+</div></div>`;
 
         container.append(optionEl);
         $("#infobutton-" + option.optionId).click((ev) => {
+          $(".info").fadeOut(0);
           $("#infobox-" + option.optionId).fadeIn(50);
           $("#infobox-" + option.optionId).mouseenter((ev) => {
             ev.target.style.display = "block";
             console.log("on info box");
           });
         });
-
-        // $(document).click((ev) => {
-        //   if (ev.target.class != ".info") {
-        //     $(".info").fadeOut(50);
-        //   }
-        // });
 
         $(".closeInfobox").click(() => {
           $("#infobox-" + option.optionId).fadeOut(50);
