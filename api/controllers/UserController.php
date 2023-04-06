@@ -19,7 +19,9 @@ class UserController extends BaseController
             $userId = $this->model->addUser($userName, "");
         }
 
-        $this->successResponse("request successfull", $userId);
+        $response = array();
+        $response["userId"] = $userId;
+        $this->successResponse("request successfull", $response);
     }
 
     protected function getUserNameByUserId($userId)

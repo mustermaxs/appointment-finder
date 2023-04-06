@@ -100,7 +100,7 @@ function getMostVotedOption(options) {
     }
   });
 
-  return mostVotedOption.optionId;
+  return mostVotedOption?.optionId;
 }
 
 const createOptionElement = (
