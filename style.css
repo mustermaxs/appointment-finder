@@ -1,6 +1,11 @@
+:root {
+  --option-container-width: 10rem;
+}
+
 body {
     background-color: #fafafa;
     line-height: 1.6;
+    overflow-x: hidden;
   }
 
   .lead {
@@ -43,7 +48,7 @@ body {
     margin: 5px;
     background-color: #fefefe;
     transition: all .2s ease;
-    max-width: 17rem;
+    width: var(--option-container-width);
   }
   
   .doodle-container:hover:not(.expired-container) {
@@ -174,10 +179,15 @@ hr {
 .votes-label-wrapper {
   display: flex;
   justify-content: flex-start;
-  max-width: inherit;
   margin-top: 10px;
   flex-direction: row;
   flex-wrap: wrap;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin: 5px;
+  max-width: var(--option-container-width);
 
 }
 
@@ -206,4 +216,88 @@ hr {
   white-space: nowrap;
   overflow: hidden;
   opacity: 0.8;
+}
+
+#options-container {
+  display: flex;
+  overflow-x: auto;
+  min-height: fit-content;
+  /* flex-wrap: wrap; */
+}
+
+.doodle-wrapper {
+  margin-bottom: 20px;
+}
+
+.info {
+  z-index: 11;
+  display: none;
+  min-width: 95%;
+  background-color: white;
+  box-shadow: 0px 0px 8px #929292;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  padding: 1.5rem 1rem;
+  position: fixed;
+  transform: translate(-50%, -43%);
+  left: 50%;
+}
+
+.infobutton {
+  cursor: pointer;
+  z-index: 10;
+  width: 1rem;
+  height: 1rem;
+  background-color: gray;
+  color: white;
+  font-size: 0.9rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  border-radius: 100%;
+  position: relative;
+  transform: translate(13px, 26px);
+  font-family: 'Times New Roman', Times, serif;
+}
+
+.closeInfobox {
+  border: none;
+  height: 1.5rem;
+  width: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  color: gray;
+  background: white;
+  position: absolute;
+  /* transform: translate(130px, -2px); */
+  border-top: none;
+  border-right: none;
+  border-left: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-bottom-left-radius: 6px;
+  box-shadow: -1px 1px 2px #ebebeb;
+  right: 0px;
+  top: 0px;
+  padding-bottom: 5px;
+}
+
+.infobox-title {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.detailCategory {
+  font-weight: bold;
+}
+
+@media only screen and (min-width: 600px) {
+  .info {
+    width: 30%;
+    min-width: 30%;
+  }
 }

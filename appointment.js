@@ -98,7 +98,7 @@ async function renderAppointment(appointmentId) {
     beforeSend: () => spinner.show(),
     complete: () => spinner.hide(),
     success: ({ data }) => {
-      const container = $("#options-wrapper");
+      const container = $("#options-container");
 
       const expirationDate = new Date(data.expirationDate);
       const currentDate = new Date();
@@ -108,22 +108,47 @@ async function renderAppointment(appointmentId) {
         expired = true;
       }
 
-      container.append(
+      $("#title").append(
         `<div class="mb-3"><h2>${data.title}</h2> <span style="color:darkred">${
           expired ? "Voting time is over!" : ""
         }</span></div>`
       );
 
       data.options.map((option) => {
+        var showVotes = false;
         const isExpired = expired ? "expired" : "";
         var voterLabelColor;
         var voterLabels = "";
-        option.votes.forEach((vote) => {
-          voterLabelColor = assignLabelColor(vote.userName);
-          voterLabels += `<div style="background: ${voterLabelColor}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
-        });
+        if (option.votes.length > 0) {
+          showVotes = true;
+          option.votes.forEach((vote) => {
+            voterLabelColor = assignLabelColor(vote.userName);
+            voterLabels += `<div style="background: ${voterLabelColor}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
+          });
+        }
 
         var optionEl = `
+        <div class="doodle-wrapper">
+        <div class="info" id="infobox-${option.optionId}">
+        <button type="button" class="closeInfobox">x</button>
+        <div title="${data.title}" class="infobox-title"><h5>${
+          data.title
+        }</h5></div>
+        <hr>
+        <p>
+          <span class="detailCategory">Location: </span><span> ${
+            data.location
+          }</span> <br>
+          
+        <span class="detailCategory">Created on: </span>${
+          data.createdOn
+        }</span><br>
+        <span class="detailCategory">Description: </span>
+        <span>
+        ${data.description}</span> <br>
+        </p>
+        </div>
+        <div class="infobutton" id="infobutton-${option.optionId}">i</div>
             <div class="doodle-container ${isExpired}-container" id="${
           option.optionId
         }" onclick="toggleCheckbox(event, ${option.optionId})">
@@ -141,11 +166,32 @@ async function renderAppointment(appointmentId) {
                   option.startDate
                 )} - ${formatHours(option.endDate)}</span>
             </div>
-            <div class="votes-label-wrapper">
-            ${voterLabels}
-            </div></div>`;
+</div>            `;
+        optionEl += showVotes
+          ? `<div class="votes-label-wrapper">
+${voterLabels}
+</div>`
+          : "";
+        optionEl += `</div>`;
 
         container.append(optionEl);
+        $("#infobutton-" + option.optionId).click((ev) => {
+          $("#infobox-" + option.optionId).fadeIn(50);
+          $("#infobox-" + option.optionId).mouseenter((ev) => {
+            ev.target.style.display = "block";
+            console.log("on info box");
+          });
+        });
+
+        // $(document).click((ev) => {
+        //   if (ev.target.class != ".info") {
+        //     $(".info").fadeOut(50);
+        //   }
+        // });
+
+        $(".closeInfobox").click(() => {
+          $("#infobox-" + option.optionId).fadeOut(50);
+        });
       });
     },
   });
