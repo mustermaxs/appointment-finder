@@ -1,5 +1,7 @@
 <?php
 require_once getcwd() . "/api/Model.php";
+require_once getcwd() . "/api/models/VoteModel.php";
+
 
 class AppointmentModel extends Model
 {
@@ -31,8 +33,20 @@ class AppointmentModel extends Model
         if ($result->num_rows <= 0)
             return null;
 
+        $voteModel = new VoteModel();
+        $votes = $voteModel->getVotesByAppointmentId($appointmentId);
+
         $appointment = (object) $result->fetch_assoc();
         $appointment->options = $this->getOptionsById($appointmentId);
+
+        for ($optionIndex = 0; $optionIndex < count($appointment->options); $optionIndex++) {
+            $appointment->options[$optionIndex]["votes"] = array();
+
+            for ($voteIndex = 0; $voteIndex < count($votes); $voteIndex++) {
+                if ($appointment->options[$optionIndex]->optionId == $votes[$voteIndex]->optionId)
+                    array_push($appointment->options[$optionIndex]["votes"], $votes[$voteIndex]);
+            }
+        }
 
         return $appointment;
     }

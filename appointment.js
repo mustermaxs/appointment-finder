@@ -18,7 +18,7 @@ function getRandomInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function getUserColor(userName) {
+function assignLabelColor(userName) {
   if (userName in userColorMap) return userColorMap[userName];
 
   var randInt = getRandomInt(0, colors.length);
@@ -27,6 +27,8 @@ function getUserColor(userName) {
 
   return color;
 }
+
+let selectedOptions = [];
 
 function formatDate(inputDate) {
   const date = new Date(inputDate);
@@ -53,7 +55,9 @@ function getAppointmentId() {
   return appointmentId;
 }
 
-function toggleCheckbox(event) {
+function toggleCheckbox(event, optionId) {
+  event.preventDefault();
+
   const target = event.target;
   if (target.tagName === "LABEL") {
     return;
@@ -69,10 +73,11 @@ function toggleCheckbox(event) {
   }
 
   checkbox.checked = !checkbox.checked;
-  event.preventDefault();
+
+  if (checkbox.checked) selectedOptions.push(optionId);
 }
 
-function renderAppointment(appointmentId) {
+async function renderAppointment(appointmentId) {
   const spinner = $("#spinner");
   $.ajax({
     type: "GET",
@@ -86,10 +91,17 @@ function renderAppointment(appointmentId) {
       container.append(`<div class="mb-3"><h2>${data.title}</h2></div>`);
 
       data.options.map((option) => {
-        var color = getUserColor("sebastian");
+        var voterLabelColor;
+        var voterLabels = "";
+        option.votes.forEach((vote) => {
+          voterLabelColor = assignLabelColor(vote.userName);
+          voterLabels += `<div style="background: ${voterLabelColor}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
+        });
 
-        container.append(`
-            <div class="doodle-container" onclick="toggleCheckbox(event)">
+        var optionEl = `
+            <div class="doodle-container" id="${
+              option.optionId
+            }" onclick="toggleCheckbox(event, ${option.optionId})">
             <div class="center">
                 <label class="doodle-checkbox">
                     <input type="checkbox" class="doodle-input" />
@@ -103,10 +115,10 @@ function renderAppointment(appointmentId) {
                 )} - ${formatHours(option.endDate)}</span>
             </div>
             <div class="votes-label-wrapper">
-            <div style="background: ${color}" title="Sebastian" class="voter-label">Sebastian</div>
-            </div>
-        </div>
-        `);
+            ${voterLabels}
+            </div></div>`;
+
+        container.append(optionEl);
       });
     },
   });
@@ -125,7 +137,9 @@ function renderComments(appointmentId) {
     success: ({ data }) => {
       const container = $("#commentsection");
 
-      data.map((comment) => {
+      const reversedData = data.reverse();
+
+      reversedData.map((comment) => {
         container.append(`
         <div class="comment">
         <h4 class="userName">${comment.userName}</h4> <span class="writtenOn">${comment.createdOn}</span>
@@ -158,7 +172,7 @@ function postComment(appointmentId, userId) {
 
     success: (response) => {
       console.log(response);
-      $("#commentsection").innerHtml = "";
+      $("#commentsection").empty();
       renderComments(appointmentId);
       $("textarea").val("");
       $("#userName").val("");
@@ -169,12 +183,12 @@ function postComment(appointmentId, userId) {
   });
 }
 
-function postVote(appointmentId, userName, optionId) {
+function postVote(appointmentId, userId, optionId) {
   $.ajax({
     type: "POST",
     url: "./api/vote/",
     contentType: "application/json",
-    data: { appointmentId, optionId, userName },
+    data: JSON.stringify({ appointmentId, userId, optionId }),
     success: (response) => {
       console.log(response);
     },
@@ -184,23 +198,20 @@ function postVote(appointmentId, userName, optionId) {
   });
 }
 
-function getVoteLablesString(appointmentId) {
-  const labelsString = async () => {
-    return new Promise((resolve, reject) => {
-      $.ajax({
-        url: `./api/user/`,
-        type: "GET",
-        data: { username: userName, action: "getid" },
-        contentType: "application/json",
-        success: ({ data }) => {
-          resolve(data.userId);
-        },
-        error: (error) => {
-          reject(error);
-        },
+function getVoteLabelsString(appointmentId) {
+  var labelsString = $.ajax({
+    url: `./api/vote/${appointmentId}/`,
+    type: "GET",
+    async: false,
+    success: ({ data }) => {
+      var tempString = "";
+      var color = assignLabelColor(vote.userName);
+      data.map((vote) => {
+        tempString += `<div style="background: ${color}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
       });
-    });
-  };
+    },
+    error: (error) => {},
+  });
 
   return labelsString();
 }
@@ -244,6 +255,17 @@ async function handleFormSubmit(ev) {
   } catch (error) {
     console.error(error);
   }
+
+  try {
+    var userId = await getUserIdByUserName(userName);
+    var appointmentId = getAppointmentId();
+
+    selectedOptions.forEach((optionId) => {
+      postVote(appointmentId, userId, optionId);
+    });
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 $(document).ready(function () {
@@ -251,7 +273,5 @@ $(document).ready(function () {
   renderAppointment(appointmentId);
   renderComments(appointmentId);
 
-  $("#appointment-form").submit((ev) => {
-    handleFormSubmit(ev);
-  });
+  $("#appointment-form").submit((ev) => handleFormSubmit(ev));
 });

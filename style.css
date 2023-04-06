@@ -188,6 +188,7 @@ hr {
 .voter-label {
   display: block;
   max-width: 6rem;
+  font-weight: bold;
   font-size: 0.8rem;
   background-color: blue;
   color: white;
