@@ -297,3 +297,7 @@ hr {
     min-width: 30rem;
   }
 }
+
+.highlight-most-voted {
+  border: 3px solid green;
+}

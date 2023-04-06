@@ -89,6 +89,20 @@ function toggleCheckbox(event, optionId) {
   }
 }
 
+function getMostVotedOption(options) {
+  let maxVotes = 0;
+  let mostVotedOption = null;
+
+  options.forEach((option) => {
+    if (option.votes.length > maxVotes) {
+      maxVotes = option.votes.length;
+      mostVotedOption = option;
+    }
+  });
+
+  return mostVotedOption.optionId;
+}
+
 async function renderAppointment(appointmentId) {
   const spinner = $("#spinner");
   $.ajax({
@@ -103,9 +117,11 @@ async function renderAppointment(appointmentId) {
       const expirationDate = new Date(data.expirationDate);
       const currentDate = new Date();
       let expired = false;
+      let mostVotedOptionId = -1;
 
       if (currentDate > expirationDate) {
         expired = true;
+        mostVotedOptionId = getMostVotedOption(data.options);
       }
 
       $("#title").append(
@@ -138,9 +154,13 @@ async function renderAppointment(appointmentId) {
         </div>
         </div>
         <div class="infobutton" id="infobutton-${option.optionId}">i</div>
-            <div class="doodle-container ${isExpired}-container" id="${
+            <div class="doodle-container ${isExpired}-container ${
+          isExpired &&
+          option.optionId == mostVotedOptionId &&
+          "highlight-most-voted"
+        }" id="${option.optionId}" onclick="toggleCheckbox(event, ${
           option.optionId
-        }" onclick="toggleCheckbox(event, ${option.optionId})">
+        })">
             <div class="center">
                 <label class="doodle-checkbox ${isExpired}-checkbox">
                     <input type="checkbox" class="doodle-input" ${
@@ -317,6 +337,7 @@ async function handleFormSubmit(ev) {
   } catch (error) {
     console.error(error);
   }
+  location.reload();
 }
 
 $(document).ready(function () {
