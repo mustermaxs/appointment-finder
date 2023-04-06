@@ -72,9 +72,21 @@ function toggleCheckbox(event, optionId) {
       .querySelector(".doodle-input");
   }
 
+  // Check if the checkbox is disabled
+  if (checkbox.disabled) {
+    return;
+  }
+
   checkbox.checked = !checkbox.checked;
 
-  if (checkbox.checked) selectedOptions.push(optionId);
+  if (checkbox.checked) {
+    selectedOptions.push(optionId);
+  } else {
+    const index = selectedOptions.indexOf(optionId);
+    if (index > -1) {
+      selectedOptions.splice(index, 1);
+    }
+  }
 }
 
 async function renderAppointment(appointmentId) {
@@ -88,9 +100,22 @@ async function renderAppointment(appointmentId) {
     success: ({ data }) => {
       const container = $("#options-wrapper");
 
-      container.append(`<div class="mb-3"><h2>${data.title}</h2></div>`);
+      const expirationDate = new Date(data.expirationDate);
+      const currentDate = new Date();
+      let expired = false;
+
+      if (currentDate > expirationDate) {
+        expired = true;
+      }
+
+      container.append(
+        `<div class="mb-3"><h2>${data.title}</h2> <span style="color:darkred">${
+          expired ? "Voting time is over!" : ""
+        }</span></div>`
+      );
 
       data.options.map((option) => {
+        const isExpired = expired ? "expired" : "";
         var voterLabelColor;
         var voterLabels = "";
         option.votes.forEach((vote) => {
@@ -99,13 +124,15 @@ async function renderAppointment(appointmentId) {
         });
 
         var optionEl = `
-            <div class="doodle-container" id="${
-              option.optionId
-            }" onclick="toggleCheckbox(event, ${option.optionId})">
+            <div class="doodle-container ${isExpired}-container" id="${
+          option.optionId
+        }" onclick="toggleCheckbox(event, ${option.optionId})">
             <div class="center">
-                <label class="doodle-checkbox">
-                    <input type="checkbox" class="doodle-input" />
-                    <span class="custom-checkbox"></span>
+                <label class="doodle-checkbox ${isExpired}-checkbox">
+                    <input type="checkbox" class="doodle-input" ${
+                      expired ? "disabled" : ""
+                    } />
+                    <span class="custom-checkbox ${isExpired}-checkbox"></span>
                 </label>
             </div>
             <div class="option-text">

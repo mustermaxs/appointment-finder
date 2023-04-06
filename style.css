@@ -45,13 +45,13 @@ body {
     transition: all .2s ease;
     max-width: 17rem;
   }
-
-  .doodle-container:hover {
+  
+  .doodle-container:hover:not(.expired-container) {
     cursor: pointer;
     background-color: #d9e8fd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-  
+  }
+
   .center {
     position: relative;
   }
@@ -83,11 +83,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 3px;
   }
-  
-  .doodle-checkbox:hover input ~ .custom-checkbox {
-    background-color: #f1f1f1;
-  }
-  
+    
   .doodle-checkbox input:checked ~ .custom-checkbox {
     background-color: #4CAF50;
     border: 1px solid #4CAF50;
@@ -185,6 +181,15 @@ hr {
 
 }
 
+.expired-container:hover {
+  cursor: not-allowed;
+  background-color: #fefefe;
+  box-shadow: none;
+}
+
+.expired-checkbox:hover {
+  cursor: not-allowed;
+}
 .voter-label {
   display: block;
   max-width: 6rem;
