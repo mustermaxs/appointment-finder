@@ -89,6 +89,21 @@ function toggleCheckbox(event, optionId) {
   }
 }
 
+function getMostVotedOption(options) {
+  let maxVotes = 0;
+  let mostVotedOption = null;
+
+  options.forEach((option) => {
+    if (option.votes.length > maxVotes) {
+      maxVotes = option.votes.length;
+      mostVotedOption = option;
+    }
+  });
+
+  return mostVotedOption.optionId;
+}
+
+
 async function renderAppointment(appointmentId) {
   const spinner = $("#spinner");
   $.ajax({
@@ -103,14 +118,16 @@ async function renderAppointment(appointmentId) {
       const expirationDate = new Date(data.expirationDate);
       const currentDate = new Date();
       let expired = false;
+      let mostVotedOptionId = -1;
 
       if (currentDate > expirationDate) {
         expired = true;
+        mostVotedOptionId = getMostVotedOption(data.options);
       }
 
+
       $("#title").append(
-        `<div class="mb-3"><h2>${data.title}</h2> <span style="color:darkred">${
-          expired ? "Voting time is over!" : ""
+        `<div class="mb-3"><h2>${data.title}</h2> <span style="color:darkred">${expired ? "Voting time is over!" : ""
         }</span></div>`
       );
 
@@ -131,40 +148,34 @@ async function renderAppointment(appointmentId) {
         <div class="doodle-wrapper">
         <div class="info" id="infobox-${option.optionId}">
         <button type="button" class="closeInfobox">x</button>
-        <div title="${data.title}" class="infobox-title"><h5>${
-          data.title
-        }</h5></div>
+        <div title="${data.title}" class="infobox-title"><h5>${data.title
+          }</h5></div>
         <hr>
         <p>
-          <span class="detailCategory">Location: </span><span> ${
-            data.location
+          <span class="detailCategory">Location: </span><span> ${data.location
           }</span> <br>
           
-        <span class="detailCategory">Created on: </span>${
-          data.createdOn
-        }</span><br>
+        <span class="detailCategory">Created on: </span>${data.createdOn
+          }</span><br>
         <span class="detailCategory">Description: </span>
         <span>
         ${data.description}</span> <br>
         </p>
         </div>
         <div class="infobutton" id="infobutton-${option.optionId}">i</div>
-            <div class="doodle-container ${isExpired}-container" id="${
-          option.optionId
-        }" onclick="toggleCheckbox(event, ${option.optionId})">
+            <div class="doodle-container ${isExpired}-container ${isExpired && option.optionId == mostVotedOptionId && "highlight-most-voted"}" id="${option.optionId}" onclick="toggleCheckbox(event, ${option.optionId})">
             <div class="center">
                 <label class="doodle-checkbox ${isExpired}-checkbox">
-                    <input type="checkbox" class="doodle-input" ${
-                      expired ? "disabled" : ""
-                    } />
+                    <input type="checkbox" class="doodle-input" ${expired ? "disabled" : ""
+          } />
                     <span class="custom-checkbox ${isExpired}-checkbox"></span>
                 </label>
             </div>
             <div class="option-text">
                 <span><b>${formatDate(option.startDate)}</b></span></br>
                 <span id="time">${formatHours(
-                  option.startDate
-                )} - ${formatHours(option.endDate)}</span>
+            option.startDate
+          )} - ${formatHours(option.endDate)}</span>
             </div>
 </div>            `;
         optionEl += showVotes
@@ -182,12 +193,6 @@ ${voterLabels}
             console.log("on info box");
           });
         });
-
-        // $(document).click((ev) => {
-        //   if (ev.target.class != ".info") {
-        //     $(".info").fadeOut(50);
-        //   }
-        // });
 
         $(".closeInfobox").click(() => {
           $("#infobox-" + option.optionId).fadeOut(50);
@@ -283,7 +288,7 @@ function getVoteLabelsString(appointmentId) {
         tempString += `<div style="background: ${color}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
       });
     },
-    error: (error) => {},
+    error: (error) => { },
   });
 
   return labelsString();
@@ -339,6 +344,7 @@ async function handleFormSubmit(ev) {
   } catch (error) {
     console.error(error);
   }
+  location.reload();
 }
 
 $(document).ready(function () {

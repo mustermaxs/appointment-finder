@@ -301,3 +301,7 @@ hr {
     min-width: 30%;
   }
 }
+
+.highlight-most-voted {
+  border: 3px solid green;
+}
