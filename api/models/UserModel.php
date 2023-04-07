@@ -17,13 +17,13 @@ class UserModel extends Model
         $result = $stmt->get_result();
         $user = $result->fetch_array(MYSQLI_ASSOC);
 
-        return $user;
+        return $user["userId"];
     }
 
     public function getUserIdByUserName(string $userName)
     {
         $query =
-            "SELECT userId, userName
+            "SELECT userId
         FROM users
         WHERE userName = ?;";
 
@@ -33,7 +33,7 @@ class UserModel extends Model
         $result = $stmt->get_result();
         $user = $result->fetch_array(MYSQLI_ASSOC);
 
-        return $user;
+        return $user["userId"];
     }
 
     public function addUser(string $userName, string $email)
@@ -46,6 +46,7 @@ class UserModel extends Model
         $stmt->bind_param("ss", $userName, $email);
         $stmt->execute();
         $userId = $this->conn->insert_id;
+
 
         return $userId;
     }

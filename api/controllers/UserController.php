@@ -12,13 +12,10 @@ class UserController extends BaseController
 
     public function getUserIdByUserName(string $userName)
     {
-        $userId = 0;
-
         $userId = $this->model->getUserIdByUserName($userName);
         if ($userId == null) {
             $userId = $this->model->addUser($userName, "");
         }
-
         $response = array();
         $response["userId"] = $userId;
         $this->successResponse("request successfull", $response);
