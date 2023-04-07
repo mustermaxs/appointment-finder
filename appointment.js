@@ -119,29 +119,25 @@ const createOptionElement = (
           ${voterLabels}
         </div>
       </div>
-      <div class="infobutton" id="infobutton-${option.optionId}">${
-    option.votes.length
-  }</div>
-      <div class="doodle-container ${isExpired}-container ${
-    isExpired && option.optionId == mostVotedOptionId
+      <div class="infobutton" id="infobutton-${option.optionId}">${option.votes.length
+    }</div>
+      <div class="doodle-container ${isExpired}-container ${isExpired && option.optionId == mostVotedOptionId
       ? "highlight-most-voted"
       : ""
-  }" id="${option.optionId}" onclick="toggleCheckbox(event, ${
-    option.optionId
-  })">
+    }" id="${option.optionId}" onclick="toggleCheckbox(event, ${option.optionId
+    })">
         <div class="center">
           <label class="doodle-checkbox ${isExpired}-checkbox">
-            <input type="checkbox" class="doodle-input" ${
-              expired ? "disabled" : ""
-            } />
+            <input type="checkbox" class="doodle-input" ${expired ? "disabled" : ""
+    } />
             <span class="custom-checkbox ${isExpired}-checkbox"></span>
           </label>
         </div>
         <div class="option-text">
           <span><b>${formatDate(option.startDate)}</b></span><br>
           <span id="time">${formatHours(option.startDate)} - ${formatHours(
-    option.endDate
-  )}</span>
+      option.endDate
+    )}</span>
         </div>
       </div>
     </div>`;
@@ -169,10 +165,11 @@ async function renderAppointment(appointmentId) {
       }
 
       $("#title").append(
-        `<div class="mb-3"><h2>${data.title}</h2> <span style="color:darkred">${
-          expired ? "Voting time is over!" : ""
+        `<div class="mb-3"><h2>${data.title}</h2> <span style="color:darkred">${expired ? "Voting time is over!" : ""
         }</span></div>`
       );
+      $("#location").text("Location: " + data.location)
+      $("#description").text("Description: " + data.description)
 
       data.options.map((option) => {
         var showVotes = false;
@@ -300,7 +297,7 @@ function getVoteLabelsString(appointmentId) {
         tempString += `<div style="background: ${color}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
       });
     },
-    error: (error) => {},
+    error: (error) => { },
   });
 
   return labelsString();
