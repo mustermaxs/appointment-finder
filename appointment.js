@@ -179,6 +179,8 @@ AppointmentPage.prototype.renderAppointment = async function (appointmentId) {
           expired ? "Voting time is over!" : ""
         }</span></div>`
       );
+      $("#location").text("Location: " + data.location);
+      $("#description").text("Description: " + data.description);
 
       data.options.map((option) => {
         var showVotes = false;
