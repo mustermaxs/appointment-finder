@@ -300,3 +300,11 @@ hr {
 .highlight-most-voted {
   border: 3px solid green;
 }
+
+.spinner-border {
+  z-index: 100;
+  display: block;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+}

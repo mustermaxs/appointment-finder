@@ -1,4 +1,12 @@
-const colors = [
+function AppointmentPage(params) {
+  this.params = params;
+}
+
+AppointmentPage.prototype.setParams = function (params) {
+  this.params = params;
+};
+
+AppointmentPage.prototype.colors = [
   "#ff69eb",
   "#ff86c8",
   "#ffa3a5",
@@ -10,52 +18,50 @@ const colors = [
   "#89023e",
 ];
 
-var userColorMap = {};
+AppointmentPage.prototype.userColorMap = {};
 
-function getRandomInt(min, max) {
+AppointmentPage.prototype.getRandomInt = function (min, max) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
-function assignLabelColor(userName) {
-  if (userName in userColorMap) return userColorMap[userName];
+AppointmentPage.prototype.assignLabelColor = function (userName) {
+  if (userName in this.userColorMap) return this.userColorMap[userName];
 
-  var randInt = getRandomInt(0, colors.length);
-  var color = colors[randInt];
-  userColorMap[userName] = color;
+  var randInt = this.getRandomInt(0, this.colors.length);
+  var color = this.colors[randInt];
+  this.userColorMap[userName] = color;
 
   return color;
-}
+};
 
-let selectedOptions = [];
+AppointmentPage.prototype.selectedOptions = [];
 
-function formatDate(inputDate) {
+AppointmentPage.prototype.formatDate = function (inputDate) {
   const date = new Date(inputDate);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
 
   return `${day}.${month}.${year}`;
-}
+};
 
-function formatHours(inputDate) {
+AppointmentPage.prototype.formatHours = function (inputDate) {
   const date = new Date(inputDate);
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
   return `${hours}:${minutes}`;
-}
+};
 
-function getAppointmentId() {
-  var hashRaw = document.location.hash;
-  var hash = hashRaw.split("#")[1];
-  var appointmentId = hash.split("id=")[1];
+AppointmentPage.prototype.appointmentId = null;
 
+AppointmentPage.prototype.getAppointmentId = function () {
   return appointmentId;
-}
+};
 
-function toggleCheckbox(event, optionId) {
+AppointmentPage.prototype.toggleCheckbox = function (event, optionId) {
   event.preventDefault();
 
   const target = event.target;
@@ -80,16 +86,16 @@ function toggleCheckbox(event, optionId) {
   checkbox.checked = !checkbox.checked;
 
   if (checkbox.checked) {
-    selectedOptions.push(optionId);
+    this.selectedOptions.push(optionId);
   } else {
-    const index = selectedOptions.indexOf(optionId);
+    const index = this.selectedOptions.indexOf(optionId);
     if (index > -1) {
-      selectedOptions.splice(index, 1);
+      this.selectedOptions.splice(index, 1);
     }
   }
-}
+};
 
-function getMostVotedOption(options) {
+AppointmentPage.prototype.getMostVotedOption = function (options) {
   let maxVotes = 0;
   let mostVotedOption = null;
 
@@ -101,15 +107,15 @@ function getMostVotedOption(options) {
   });
 
   return mostVotedOption?.optionId;
-}
+};
 
-const createOptionElement = (
+AppointmentPage.prototype.createOptionElement = function (
   option,
   voterLabels,
   isExpired,
   expired,
   mostVotedOptionId
-) => {
+) {
   return `
     <div class="doodle-wrapper">
       <div class="info" id="infobox-${option.optionId}">
@@ -126,7 +132,7 @@ const createOptionElement = (
     isExpired && option.optionId == mostVotedOptionId
       ? "highlight-most-voted"
       : ""
-  }" id="${option.optionId}" onclick="toggleCheckbox(event, ${
+  }" id="${option.optionId}" onclick="pageHandler.toggleCheckbox(event, ${
     option.optionId
   })">
         <div class="center">
@@ -138,16 +144,16 @@ const createOptionElement = (
           </label>
         </div>
         <div class="option-text">
-          <span><b>${formatDate(option.startDate)}</b></span><br>
-          <span id="time">${formatHours(option.startDate)} - ${formatHours(
-    option.endDate
-  )}</span>
+          <span><b>${this.formatDate(new Date(option.startDate))}</b></span><br>
+          <span id="time">${this.formatHours(
+            new Date(option.startDate)
+          )} - ${this.formatHours(option.endDate)}</span>
         </div>
       </div>
     </div>`;
 };
 
-async function renderAppointment(appointmentId) {
+AppointmentPage.prototype.renderAppointment = async function (appointmentId) {
   const spinner = $("#spinner");
   $.ajax({
     type: "GET",
@@ -165,7 +171,7 @@ async function renderAppointment(appointmentId) {
 
       if (currentDate > expirationDate) {
         expired = true;
-        mostVotedOptionId = getMostVotedOption(data.options);
+        mostVotedOptionId = this.getMostVotedOption(data.options);
       }
 
       $("#title").append(
@@ -182,13 +188,13 @@ async function renderAppointment(appointmentId) {
         if (option.votes.length > 0) {
           showVotes = true;
           option.votes.forEach((vote) => {
-            voterLabelColor = assignLabelColor(vote.userName);
+            voterLabelColor = this.assignLabelColor(vote.userName);
             voterLabels += `<div style="background: ${voterLabelColor}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
           });
         } else {
           voterLabels = "<span>No votes yet...</span>";
         }
-        var optionEl = createOptionElement(
+        var optionEl = this.createOptionElement(
           option,
           voterLabels,
           isExpired,
@@ -212,10 +218,10 @@ async function renderAppointment(appointmentId) {
       });
     },
   });
-}
+};
 
 // TODO comments rendern
-function renderComments(appointmentId) {
+AppointmentPage.prototype.renderComments = function (appointmentId) {
   const spinner = $("#spinner");
 
   $.ajax({
@@ -241,9 +247,9 @@ function renderComments(appointmentId) {
       });
     },
   });
-}
+};
 
-function postComment(appointmentId, userId) {
+AppointmentPage.prototype.postComment = function (appointmentId, userId) {
   var content = $("#newComment").val();
   content = content.trim();
 
@@ -263,7 +269,7 @@ function postComment(appointmentId, userId) {
     success: (response) => {
       console.log(response);
       $("#commentsection").empty();
-      renderComments(appointmentId);
+      this.renderComments(appointmentId);
       $("textarea").val("");
       $("#userName").val("");
     },
@@ -271,9 +277,13 @@ function postComment(appointmentId, userId) {
       console.log(response);
     },
   });
-}
+};
 
-function postVote(appointmentId, userId, optionId) {
+AppointmentPage.prototype.postVote = function (
+  appointmentId,
+  userId,
+  optionId
+) {
   $.ajax({
     type: "POST",
     url: "./api/vote/",
@@ -286,16 +296,16 @@ function postVote(appointmentId, userId, optionId) {
       console.log(response);
     },
   });
-}
+};
 
-function getVoteLabelsString(appointmentId) {
+AppointmentPage.prototype.getVoteLabelsString = function (appointmentId) {
   var labelsString = $.ajax({
     url: `./api/vote/${appointmentId}/`,
     type: "GET",
     async: false,
     success: ({ data }) => {
       var tempString = "";
-      var color = assignLabelColor(vote.userName);
+      var color = this.assignLabelColor(vote.userName);
       data.map((vote) => {
         tempString += `<div style="background: ${color}" title="${vote.userName}" class="voter-label">${vote.userName}</div>`;
       });
@@ -303,10 +313,10 @@ function getVoteLabelsString(appointmentId) {
     error: (error) => {},
   });
 
-  return labelsString();
-}
+  return this.labelsString();
+};
 
-function getUserIdByUserName(userName) {
+AppointmentPage.prototype.getUserIdByUserName = function (userName) {
   const getId = async () => {
     return new Promise((resolve, reject) => {
       $.ajax({
@@ -325,10 +335,10 @@ function getUserIdByUserName(userName) {
   };
 
   return getId();
-}
+};
 
 // TODO
-async function handleFormSubmit(ev) {
+AppointmentPage.prototype.handleFormSubmit = async function (ev) {
   ev.preventDefault();
   var userName = $("#userName").val().trim();
 
@@ -338,31 +348,39 @@ async function handleFormSubmit(ev) {
   }
 
   try {
-    var userId = await getUserIdByUserName(userName);
-    var appointmentId = getAppointmentId();
+    var userId = await this.getUserIdByUserName(userName);
+    var appointmentId = this.getAppointmentId();
 
-    postComment(appointmentId, userId);
+    this.postComment(appointmentId, userId);
   } catch (error) {
     console.error(error);
   }
 
   try {
-    var userId = await getUserIdByUserName(userName);
-    var appointmentId = getAppointmentId();
+    var userId = await this.getUserIdByUserName(userName);
+    var appointmentId = this.getAppointmentId();
 
-    selectedOptions.forEach((optionId) => {
-      postVote(appointmentId, userId, optionId);
+    this.selectedOptions.forEach((optionId) => {
+      this.postVote(appointmentId, userId, optionId);
     });
   } catch (error) {
     console.error(error);
   }
   location.reload();
-}
+};
 
-$(document).ready(function () {
-  var appointmentId = getAppointmentId();
-  renderAppointment(appointmentId);
-  renderComments(appointmentId);
+AppointmentPage.prototype.init = function () {
+  appointmentId = this.params.id;
 
-  $("#appointment-form").submit((ev) => handleFormSubmit(ev));
-});
+  $("#spaMainContainer").load("appointment.html", () => {
+    var appointmentId = this.getAppointmentId();
+    this.renderAppointment(appointmentId);
+    this.renderComments(appointmentId);
+
+    $("#save").click((ev) => this.handleFormSubmit(ev));
+  });
+};
+
+AppointmentPage.prototype.reset = function () {
+  this.selectedOptions = [];
+};

@@ -1,4 +1,12 @@
-function formatDateWithHours(inputDate) {
+function IndexPage(params) {
+  this.params = params;
+}
+
+IndexPage.prototype.setParams = function (params) {
+  this.params = params;
+};
+
+IndexPage.prototype.formatDateWithHours = function (inputDate) {
   const date = new Date(inputDate);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, "0");
@@ -7,24 +15,23 @@ function formatDateWithHours(inputDate) {
   const minutes = String(date.getMinutes()).padStart(2, "0");
 
   return `${day}.${month}.${year} ${hours}:${minutes}`;
-}
+};
 
-$(window).on("load", () => {
-  // Get a reference to the spinner element
+// Get a reference to the spinner element
+IndexPage.prototype.init = function () {
+  $("#spaMainContainer").load("spaIndex.html");
   const spinner = $("#spinner");
-
   $.ajax({
     type: "GET",
     url: "./api/appointment/",
     dataType: "json",
     beforeSend: () => spinner.show(),
     success: ({ data }) => {
-      const container = $(".row");
+      const container = $("#cardsContainer");
 
       const reversedData = data.reverse();
 
       reversedData.forEach((appointment) => {
-
         const expirationDate = new Date(appointment.expirationDate);
         const currentDate = new Date();
         let expired = false;
@@ -42,11 +49,21 @@ $(window).on("load", () => {
                 <div class="col-md-6">
                   <div class="card mb-3">
                     <div class="card-header p-3 text-black">
-                      <h5 class="card-title mb-0">${appointment.title}<span style="float:right; font-size:1rem" >${formatDateWithHours(appointment.createdOn)}</span></h5>
+                      <h5 class="card-title mb-0">${
+                        appointment.title
+                      }<span style="float:right; font-size:1rem" >${this.formatDateWithHours(
+          appointment.createdOn
+        )}</span></h5>
                     </div>
                     <div class="card-body">
-                      <p class="card-text" ${expired ? 'style="color:darkred"' : ''}>${expiredText} ${appointment.expirationDate}</p>
-                      <a href="appointment.html#id=${appointment.appointmentId}" class="btn btn-success">${expired ? 'details' : 'vote'}</a>
+                      <p class="card-text" ${
+                        expired ? 'style="color:darkred"' : ""
+                      }>${expiredText} ${appointment.expirationDate}</p>
+                      <a href="#page=appointment&id=${
+                        appointment.appointmentId
+                      }" class="btn btn-success">${
+          expired ? "details" : "vote"
+        }</a>
                     </div>
                   </div>
                 </div>
@@ -59,4 +76,6 @@ $(window).on("load", () => {
 
     complete: () => spinner.hide(),
   });
-});
+};
+
+IndexPage.prototype.reset = () => {};
