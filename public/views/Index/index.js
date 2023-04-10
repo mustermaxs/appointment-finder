@@ -19,7 +19,7 @@ IndexPage.prototype.formatDateWithHours = function (inputDate) {
 
 // Get a reference to the spinner element
 IndexPage.prototype.init = function () {
-  $("#spaMainContainer").load("spaIndex.html");
+  $("#spaMainContainer").load("./public/views/Index/spaIndex.html");
   const spinner = $("#spinner");
   $.ajax({
     type: "GET",

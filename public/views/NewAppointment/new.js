@@ -135,7 +135,7 @@ function deleteItem({ index }) {
 
 NewAppointmentPage.prototype.init = function (containerEl) {
   var _this = {};
-  $("#spaMainContainer").load("new.html", () => {
+  $("#spaMainContainer").load("./public/views/NewAppointment/new.html", () => {
     this.enableAddDate();
 
     $("#saveNewAppointment").click((event) => {

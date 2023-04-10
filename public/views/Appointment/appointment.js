@@ -379,13 +379,16 @@ AppointmentPage.prototype.handleFormSubmit = async function (ev) {
 AppointmentPage.prototype.init = function () {
   appointmentId = this.params.id;
 
-  $("#spaMainContainer").load("appointment.html", () => {
-    var appointmentId = this.getAppointmentId();
-    this.renderAppointment(appointmentId);
-    this.renderComments(appointmentId);
+  $("#spaMainContainer").load(
+    "./public/views/Appointment/appointment.html",
+    () => {
+      var appointmentId = this.getAppointmentId();
+      this.renderAppointment(appointmentId);
+      this.renderComments(appointmentId);
 
-    $("#save").click((ev) => this.handleFormSubmit(ev));
-  });
+      $("#save").click((ev) => this.handleFormSubmit(ev));
+    }
+  );
 };
 
 AppointmentPage.prototype.reset = function () {
