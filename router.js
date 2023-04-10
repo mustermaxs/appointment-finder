@@ -56,13 +56,15 @@ function SPArouter() {
       let hashValue = location.hash.replace("#", "");
       this.matchPattern(hashValue);
     });
-    window.addEventListener("load", () => {
+    window.addEventListener("load", (ev) => {
       // location.hash = "#";
+      ev.preventDefault();
       if (startingParams == null) {
         location.hash = "#page=index";
 
         return;
       }
+      // location.hash = "";
       location.hash = startingParams;
     });
   };

@@ -179,8 +179,13 @@ AppointmentPage.prototype.renderAppointment = async function (appointmentId) {
           expired ? "Voting time is over!" : ""
         }</span></div>`
       );
-      $("#location").text("Location: " + data.location);
+      let urlLocation = data.location.replaceAll("#", " ");
+      let googleMapsPath = "https://www.google.at/maps/search/" + urlLocation;
+
+      $("#locationLabel").text("Location: ");
       $("#description").text("Description: " + data.description);
+      $("#location").attr("href", googleMapsPath);
+      $("#location").text(data.location);
 
       data.options.map((option) => {
         var showVotes = false;
