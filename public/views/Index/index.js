@@ -48,12 +48,12 @@ IndexPage.prototype.init = function () {
         const cardHtml = `
                 <div class="col-md-6">
                   <div class="card mb-3">
-                    <div class="card-header p-3 text-black">
+                    <div class="card-header p-3 text-black custum-card-header">
                       <h5 class="card-title mb-0">${
                         appointment.title
-                      }<span style="float:right; font-size:1rem" >${this.formatDateWithHours(
+                      }</h5><span style="display: block" >${this.formatDateWithHours(
           appointment.createdOn
-        )}</span></h5>
+        )}</span>
                     </div>
                     <div class="card-body">
                       <p class="card-text" ${

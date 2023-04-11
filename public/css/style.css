@@ -314,8 +314,16 @@ hr {
   flex-direction: row;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
 }
 
 .card {
   margin-right: 1rem !important;
+}
+
+.custom-card-header {
+  display: flex;
+    flex-wrap: wrap;
+    align-content: space-between;
+    justify-content: space-between;
 }
