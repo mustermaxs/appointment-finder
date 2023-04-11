@@ -7,8 +7,6 @@ NewAppointmentPage.prototype.setParams = function (params) {
 };
 NewAppointmentPage.prototype.options = [];
 NewAppointmentPage.prototype.optionsCount = 0;
-let options = [];
-var optionsCount = 0;
 
 NewAppointmentPage.prototype.formatDate = function (date) {
   const year = date.getFullYear();

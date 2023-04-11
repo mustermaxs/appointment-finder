@@ -1,12 +1,15 @@
 function AppointmentPage(params) {
   this.params = params;
   this.pageTitle = "Appointment";
+  this.appointmentId = null;
 }
 
 AppointmentPage.prototype.setParams = function (params) {
   this.params = params;
 };
 
+AppointmentPage.prototype.userColorMap = {};
+AppointmentPage.prototype.selectedOptions = [];
 AppointmentPage.prototype.colors = [
   "#ff69eb",
   "#ff86c8",
@@ -18,8 +21,6 @@ AppointmentPage.prototype.colors = [
   "#4f5d75",
   "#89023e",
 ];
-
-AppointmentPage.prototype.userColorMap = {};
 
 AppointmentPage.prototype.getRandomInt = function (min, max) {
   min = Math.ceil(min);
@@ -37,8 +38,6 @@ AppointmentPage.prototype.assignLabelColor = function (userName) {
   return color;
 };
 
-AppointmentPage.prototype.selectedOptions = [];
-
 AppointmentPage.prototype.formatDate = function (inputDate) {
   const date = new Date(inputDate);
   const year = date.getFullYear();
@@ -55,8 +54,6 @@ AppointmentPage.prototype.formatHours = function (inputDate) {
 
   return `${hours}:${minutes}`;
 };
-
-AppointmentPage.prototype.appointmentId = null;
 
 AppointmentPage.prototype.getAppointmentId = function () {
   return appointmentId;
@@ -180,7 +177,7 @@ AppointmentPage.prototype.renderAppointment = async function (appointmentId) {
       let urlLocation = data.location.replaceAll("#", " ");
       let googleMapsPath = "https://www.google.at/maps/search/" + urlLocation;
       $("#meetingTitle").text(data.title);
-      $("#description").text("Description: " + data.description);
+      $("#description").text(data.description);
       $("#location").attr("href", googleMapsPath);
       $("#location").text(data.location);
 
@@ -347,7 +344,6 @@ AppointmentPage.prototype.getUserIdByUserName = function (userName) {
   return getId();
 };
 
-// TODO
 AppointmentPage.prototype.handleFormSubmit = async function (ev) {
   ev.preventDefault();
   var userName = $("#userName").val().trim();
@@ -376,7 +372,7 @@ AppointmentPage.prototype.handleFormSubmit = async function (ev) {
   } catch (error) {
     console.error(error);
   }
-  location.reload();
+  location.hash = "page=appointment&id=" + this.params.id;
 };
 
 AppointmentPage.prototype.init = function () {

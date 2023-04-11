@@ -18,12 +18,7 @@ IndexPage.prototype.formatDateWithHours = function (inputDate) {
   return `${day}.${month}.${year} ${hours}:${minutes}`;
 };
 
-// Get a reference to the spinner element
-IndexPage.prototype.init = function () {
-  $("#spaMainContainer").load("./public/views/Index/spaIndex.html", () => {
-    $("#pageHeadline").text(this.pageTitle);
-  });
-  const spinner = $("#spinner");
+IndexPage.prototype.renderAppointments = async function () {
   $.ajax({
     type: "GET",
     url: "./api/appointment/",
@@ -78,6 +73,14 @@ IndexPage.prototype.init = function () {
     error: (res) => alert(JSON.stringify(res)),
 
     complete: () => spinner.hide(),
+  });
+};
+
+// Get a reference to the spinner element
+IndexPage.prototype.init = function () {
+  $("#spaMainContainer").load("./public/views/Index/spaIndex.html", () => {
+    $("#pageHeadline").text(this.pageTitle);
+    this.renderAppointments();
   });
 };
 

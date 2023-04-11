@@ -93,13 +93,14 @@ function SPArouter(spaContainer) {
 }
 
 const spinner = $("#spinner");
+
 var router = new SPArouter($("#spaMainContainer"));
+
 router.addPage("index", IndexPage);
 router.addPage("new", NewAppointmentPage);
 router.addPage("appointment", AppointmentPage);
 router.setStartingParams("#page=index");
 router.setStartingPage("index");
-router.start();
 
 router.addRoute(":page", () => {
   console.log("requested route: ", router.params.page);
@@ -111,3 +112,5 @@ router.addRoute(":page", () => {
 router.addRoute(":page:id", () => {
   router.renderPage();
 });
+
+router.start();

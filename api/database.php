@@ -16,7 +16,6 @@ class Database
         if (!self::$connection) {
             $config = new Config();
             self::$connection = new mysqli($config->host, $config->user, $config->password, $config->database);
-            // var_dump(self::$connection);
         }
     }
 
