@@ -1,5 +1,6 @@
 function IndexPage(params) {
   this.params = params;
+  this.pageTitle = "Appointments";
 }
 
 IndexPage.prototype.setParams = function (params) {
@@ -19,7 +20,9 @@ IndexPage.prototype.formatDateWithHours = function (inputDate) {
 
 // Get a reference to the spinner element
 IndexPage.prototype.init = function () {
-  $("#spaMainContainer").load("./public/views/Index/spaIndex.html");
+  $("#spaMainContainer").load("./public/views/Index/spaIndex.html", () => {
+    $("#pageHeadline").text(this.pageTitle);
+  });
   const spinner = $("#spinner");
   $.ajax({
     type: "GET",

@@ -1,35 +1,39 @@
 <div class="container mt-4">
-    <h1 class="text-center">Appointment</h1>
     <div class="row justify-content-center mt-5">
         <div class="text-center">
         </div>
         <div class="col-md-8 col-sm-12">
             <form action="" id="appointment-form">
-                <div id="title"></div>
-                <div id="wrapper" class="row mb-3">
-                    <div>
-                        <span id="locationLabel"></span>
-                        <a target="_blank" id="location"></a>
-                        <br>
-                        <span id="description"></span>
+                <div id="title">
+                    <div class="mb-3">
+                        <h2 id="meetingTitle">...</h2>
+                        <span id="votingExpired" style="color:darkred"></span>
+                    </div </div>
+                    <div id="wrapper" class="row mb-3">
+                        <div>
+                            <span style="font-weight: bold" id="locationLabel">Location: </span>
+                            <a target="_blank" id="location">...</a>
+                            <br>
+                            <span style="font-weight: bold">Description: </span>
+                            <span id="description">...</span>
+                        </div>
+                        <div id="options-container"></div>
+                        <div id="userName-wrapper" class="mb-3 col-5">
+                            <label for="userName" class="form-label">Username</label>
+                            <input type="text" class="form-control" id="userName" name="userName" placeholder="Username"
+                                required>
+                        </div>
                     </div>
-                    <div id="options-container"></div>
-                    <div id="userName-wrapper" class="mb-3 col-5">
-                        <label for="userName" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="userName" name="userName" placeholder="Username"
-                            required>
-                    </div>
-                </div>
-                <!-- render options here -->
-                <hr>
-                <div class="mb-3">
-                    <label for="comments" class="form-label">Kommentar</label>
-                    <textarea class="form-control" id="newComment" name="newComment"></textarea>
-                    <div class="d-grid gap-2 mt-3 d-md-flex justify-content-md-end">
+                    <!-- render options here -->
+                    <hr>
+                    <div class="mb-3">
+                        <label for="comments" class="form-label">Kommentar</label>
+                        <textarea class="form-control" id="newComment" name="newComment"></textarea>
+                        <div class="d-grid gap-2 mt-3 d-md-flex justify-content-md-end">
 
-                        <button id="save" class="btn btn-primary" type="button">Abstimmen</button>
+                            <button id="save" class="btn btn-primary" type="button">Abstimmen</button>
+                        </div>
                     </div>
-                </div>
             </form>
 
             <!-- TODO comments -->

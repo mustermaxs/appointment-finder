@@ -49,7 +49,17 @@ body {
     background-color: #fefefe;
     transition: all .2s ease;
     width: var(--option-container-width);
+    opacity: 0;
+    animation-name: fadeIn;
+    animation-duration: 0.2s;
+    animation-fill-mode: forwards;
   }
+
+  @keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
   
   .doodle-container:hover:not(.expired-container) {
     cursor: pointer;
@@ -219,10 +229,13 @@ hr {
   display: flex;
   flex-wrap: wrap;
   flex-direction: row;
+  min-height: 8rem;
+  width: 100%;
 }
 
 .doodle-wrapper {
   margin-bottom: -14px;
+  min-height: 8rem;
 }
 
 .info {
@@ -326,4 +339,9 @@ hr {
     flex-wrap: wrap;
     align-content: space-between;
     justify-content: space-between;
+}
+
+#pageHeadline {
+  display: block;
+  width: 100vw !important;
 }

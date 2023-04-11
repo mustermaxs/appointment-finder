@@ -1,5 +1,6 @@
 function AppointmentPage(params) {
   this.params = params;
+  this.pageTitle = "Appointment";
 }
 
 AppointmentPage.prototype.setParams = function (params) {
@@ -132,9 +133,9 @@ AppointmentPage.prototype.createOptionElement = function (
     isExpired && option.optionId == mostVotedOptionId
       ? "highlight-most-voted"
       : ""
-  }" id="${option.optionId}" onclick="pageHandler.toggleCheckbox(event, ${
+  }" id="${
     option.optionId
-  })">
+  }" onclick="router.pageHandler.toggleCheckbox(event, ${option.optionId})">
         <div class="center">
           <label class="doodle-checkbox ${isExpired}-checkbox">
             <input type="checkbox" class="doodle-input" ${
@@ -150,11 +151,11 @@ AppointmentPage.prototype.createOptionElement = function (
           )} - ${this.formatHours(option.endDate)}</span>
         </div>
       </div>
-    </div>`;
+    </div>
+    `;
 };
 
 AppointmentPage.prototype.renderAppointment = async function (appointmentId) {
-  const spinner = $("#spinner");
   $.ajax({
     type: "GET",
     url: `./api/appointment/${appointmentId}/`,
@@ -174,15 +175,11 @@ AppointmentPage.prototype.renderAppointment = async function (appointmentId) {
         mostVotedOptionId = this.getMostVotedOption(data.options);
       }
 
-      $("#title").append(
-        `<div class="mb-3"><h2>${data.title}</h2> <span style="color:darkred">${
-          expired ? "Voting time is over!" : ""
-        }</span></div>`
-      );
+      if (expired) $("#votingExpired").text("Voting time is over!");
+
       let urlLocation = data.location.replaceAll("#", " ");
       let googleMapsPath = "https://www.google.at/maps/search/" + urlLocation;
-
-      $("#locationLabel").text("Location: ");
+      $("#meetingTitle").text(data.title);
       $("#description").text("Description: " + data.description);
       $("#location").attr("href", googleMapsPath);
       $("#location").text(data.location);
@@ -267,6 +264,8 @@ AppointmentPage.prototype.postComment = function (appointmentId, userId) {
     url: "./api/comment/",
     dataType: "json",
     contentType: "application/json",
+    beforeSend: () => spinner.show(),
+    complete: () => spinner.hide(),
     data: JSON.stringify({
       content: content,
       appointmentId: appointmentId,
@@ -295,6 +294,8 @@ AppointmentPage.prototype.postVote = function (
     type: "POST",
     url: "./api/vote/",
     contentType: "application/json",
+    beforeSend: () => spinner.show(),
+    complete: () => spinner.hide(),
     data: JSON.stringify({ appointmentId, userId, optionId }),
     success: (response) => {
       console.log(response);
@@ -310,6 +311,8 @@ AppointmentPage.prototype.getVoteLabelsString = function (appointmentId) {
     url: `./api/vote/${appointmentId}/`,
     type: "GET",
     async: false,
+    beforeSend: () => spinner.show(),
+    complete: () => spinner.hide(),
     success: ({ data }) => {
       var tempString = "";
       var color = this.assignLabelColor(vote.userName);
@@ -382,6 +385,7 @@ AppointmentPage.prototype.init = function () {
   $("#spaMainContainer").load(
     "./public/views/Appointment/appointment.html",
     () => {
+      $("#pageHeadline").text(this.pageTitle);
       var appointmentId = this.getAppointmentId();
       this.renderAppointment(appointmentId);
       this.renderComments(appointmentId);

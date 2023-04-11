@@ -63,16 +63,12 @@ class Router
         $route = preg_replace("/(\?[a-z=]+)/", "", $url);
         preg_match("/\/api\/([a-z]+)\//", $route, $controller);
         $this->addRequest("controller", $controller[1]);
-        // preg_matc>_all("/([a-z-]+)/", $route, $controllerAndView);
-        // // var_dump($controllerAndView);
-        // $this->setRequest("controller", @$controllerAndView[0][0]);
 
         foreach ($patterns as $pattern) {
             if (preg_match($pattern, $route, $matches)) {
                 $namedGroupMatches = array_filter($matches, "is_string", ARRAY_FILTER_USE_KEY);
 
                 foreach ($namedGroupMatches as $key => $value) {
-                    // echo "\n". $matches["view"];
                     $this->addRequest($key, $value);
                 }
                 return true;
@@ -120,22 +116,23 @@ class Router
 
     public function dispatch(string $url, string $requestMethod)
     {
-        $url = str_replace($this->baseURL, "", $url);
+        $url = str_replace($this->baseURL, "", $url);   // cut the localhost... part
         $method = strtoupper($requestMethod);
 
+        // store query params in assoc. request array
         if ($requestMethod == "GET") {
             foreach ($_GET as $key => $value) {
                 $this->addRequest($key, $value);
             }
         }
-        $url = preg_replace('/\\?.*/', '', $url);
+        $url = preg_replace('/\\?.*/', '', $url);       // remove optional query params from url
+        $this->addRequest("url", $url);
+        $this->addRequest("method", $requestMethod);
 
         if (!$this->matchRoute($this->routes[$method], $url)) {
             $this->routeexists = false;
             return;
         }
         $this->routeexists = true;
-        $this->addRequest("url", $url);
-        $this->addRequest("method", $requestMethod);
     }
 }

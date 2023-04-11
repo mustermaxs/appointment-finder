@@ -1,5 +1,6 @@
 function NewAppointmentPage(params) {
   this.params = params;
+  this.pageTitle = "Add Appointments";
 }
 NewAppointmentPage.prototype.setParams = function (params) {
   this.params = params;
@@ -136,6 +137,7 @@ function deleteItem({ index }) {
 NewAppointmentPage.prototype.init = function (containerEl) {
   var _this = {};
   $("#spaMainContainer").load("./public/views/NewAppointment/new.html", () => {
+    $("#pageHeadline").text(this.pageTitle);
     this.enableAddDate();
 
     $("#saveNewAppointment").click((event) => {
