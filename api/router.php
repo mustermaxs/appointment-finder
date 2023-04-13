@@ -3,14 +3,16 @@
 /**
  * request parameters stored in $request, get with Router::request()
  * add route with get/ put / post / delete
- * 
- * 
+ * variable url parameters can be defined with ":id"
+ * eg. /api/user/:id    where "user" is the controller and ":id"
+ * a query parameter that will be passed to the controller
  */
 
 class Router
 {
     private $requestDetails = [];
-    private $baseURL = "";
+    private $apiControllerDir = null;
+    private $baseURL = null;
     private bool $routeexists = false;
     private array $routes = [
         "GET" => [],
@@ -19,9 +21,13 @@ class Router
         "DELETE" => []
     ];
 
-    function __construct(string $baseURL = "")
+    function __construct(string $baseURL = "", string $apiControllerDir)
     {
-        $this->baseURL = $baseURL;
+        if ($baseURL == null || $apiControllerDir == null)
+            throw new Error("Router instatiated incorrectly!");
+
+        $this->apiControllerDir = $apiControllerDir;
+        $this->baseURL = $baseURL;  // name of webapp (eg. appointment-finder)
     }
 
     public function get(string $url)
@@ -57,7 +63,9 @@ class Router
 
         return $regexPattern;
     }
-
+    // checks if requested url matches pattern in $routes ( /controller/[:optionalParams] )
+    // if it does, it extracts query params (NOT search query) and stores them
+    // in $requestDetails array
     private function matchRoute(array $patterns, $url): bool
     {
         $route = preg_replace("/(\?[a-z=]+)/", "", $url);
@@ -88,6 +96,11 @@ class Router
         return $this->routeexists;
     }
 
+    public function getRequestMethod()
+    {
+        return $this->requestDetails["method"];
+    }
+
     public function request()
     {
         return $this->requestDetails;
@@ -100,6 +113,7 @@ class Router
             'status' => 'success',
             'message' => $message,
             'data' => $data,
+            'statuscode' => $statusCode
         ]);
         exit();
     }
@@ -110,8 +124,24 @@ class Router
         echo json_encode([
             'status' => 'error',
             'message' => $message,
+            'statuscode' => $statusCode
         ]);
         exit();
+    }
+
+    private function initController()
+    {
+        $controllerName = $this->requestDetails["controller"];
+        $controllerClassName = ucfirst($controllerName) . "Controller";
+        $controllerPath = $this->apiControllerDir . $controllerClassName . ".php";
+        $controllerAction = strtolower($this->getRequestMethod());
+
+        if (!file_exists($controllerPath))
+            $this->errorResponse("route doesn't exist", 400);
+
+        require_once $controllerPath;
+        $controller = new $controllerClassName($this->requestDetails);
+        $controller->$controllerAction();
     }
 
     public function dispatch(string $url, string $requestMethod)
@@ -119,20 +149,22 @@ class Router
         $url = str_replace($this->baseURL, "", $url);   // cut the localhost... part
         $method = strtoupper($requestMethod);
 
-        // store query params in assoc. request array
+        // store query params in $requestDetails
         if ($requestMethod == "GET") {
             foreach ($_GET as $key => $value) {
                 $this->addRequest($key, $value);
             }
         }
-        $url = preg_replace('/\\?.*/', '', $url);       // remove optional query params from url
+        $url = preg_replace('/\\?.*/', '', $url);       // remove optional search query params from url
         $this->addRequest("url", $url);
         $this->addRequest("method", $requestMethod);
 
         if (!$this->matchRoute($this->routes[$method], $url)) {
             $this->routeexists = false;
-            return;
+            $this->errorResponse("Requested route doesn't exist", 400);
         }
         $this->routeexists = true;
+
+        $this->initController();
     }
 }

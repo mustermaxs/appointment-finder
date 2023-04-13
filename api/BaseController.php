@@ -23,6 +23,7 @@ abstract class BaseController
             'status' => 'success',
             'message' => $message,
             'data' => $data,
+            'statuscode' => $statusCode
         ]);
         exit();
     }
@@ -33,6 +34,7 @@ abstract class BaseController
         echo json_encode([
             'status' => 'error',
             'message' => $message,
+            'statuscode' => $statusCode
         ]);
         exit();
     }
