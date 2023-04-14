@@ -60,7 +60,7 @@ class Router
     public function createRegexPattern($path)
     {
         $regexPattern = preg_replace("/\//", "\\/", $path);
-        $regexPattern = preg_replace('/\:([a-z-]+)(\[s\])/', '(?\'\1\'[A-Za-z-_]+)', $regexPattern);       // match only a-z
+        $regexPattern = preg_replace('/\:([a-z-]+)(\[a\])/', '(?\'\1\'[A-Za-z-_]+)', $regexPattern);       // match only a-z
         $regexPattern = preg_replace('/\:([a-z-]+)(\[i\])/', '(?\'\1\'[0-9-_]+)', $regexPattern);       // match only integers 0-9+, underline and hyphen
         $regexPattern = preg_replace('/\:([a-z0-9-]+)/', '(?\'\1\'[A-Za-z-_0-9]+)', $regexPattern);        // match character a-z and integers
         $regexPattern = "/^" . $regexPattern . "\/?$/";
