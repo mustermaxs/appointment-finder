@@ -6,7 +6,10 @@
  * variable url parameters can be defined with ":id"
  * eg. /api/user/:id    where "user" is the controller and ":id"
  * a query parameter that will be passed to the controller
+ * datatypes can be defined for named url params /:id[i] => id has to be
+ * integer [0-9]+, /:id[s] => id has to be string with characters from alphabet [a-z]+
  */
+
 
 class Router
 {
@@ -57,8 +60,9 @@ class Router
     public function createRegexPattern($path)
     {
         $regexPattern = preg_replace("/\//", "\\/", $path);
-        $regexPattern = preg_replace('/\:([a-z0-9-]+)/', '(?\'\1\'[a-z-_0-9]+)', $regexPattern);
-        // $regexPattern = preg_replace("/\/$/", , $regexPattern);
+        $regexPattern = preg_replace('/\:([a-z-]+)(\[s\])/', '(?\'\1\'[A-Za-z-_]+)', $regexPattern);       // match only a-z
+        $regexPattern = preg_replace('/\:([a-z-]+)(\[i\])/', '(?\'\1\'[0-9-_]+)', $regexPattern);       // match only integers 0-9+, underline and hyphen
+        $regexPattern = preg_replace('/\:([a-z0-9-]+)/', '(?\'\1\'[A-Za-z-_0-9]+)', $regexPattern);        // match character a-z and integers
         $regexPattern = "/^" . $regexPattern . "\/?$/";
 
         return $regexPattern;
