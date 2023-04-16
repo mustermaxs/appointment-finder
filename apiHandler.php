@@ -6,16 +6,16 @@ $router = new Router("/appointment-finder", $controllerPathPrefix);
 
 // ROUTES
 
-$router->post("/api/appointment/");
-$router->get("/api/appointment/:id[i]");
-$router->get("/api/appointment/");
-$router->post("/api/user/");
-$router->get("/api/user/:id/[i]");
-$router->get("/api/user/");
-$router->post("/api/comment/");
-$router->get("/api/comment/:id[i]/");
-$router->post("/api/vote/");
-$router->get("/api/vote/:id[i]/");
+$router->post("/api/appointments/");
+$router->get("/api/appointments/:id[i]");
+$router->get("/api/appointments/");
+$router->post("/api/users/");
+$router->get("/api/users/:id/[i]");
+$router->get("/api/users/");
+$router->post("/api/comments/");
+$router->get("/api/comments/:id[i]/");
+$router->post("/api/votes/");
+$router->get("/api/votes/:id[i]/");
 
 
 $url = $_SERVER["REQUEST_URI"];

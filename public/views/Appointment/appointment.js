@@ -155,7 +155,7 @@ AppointmentPage.prototype.createOptionElement = function (
 AppointmentPage.prototype.renderAppointment = async function (appointmentId) {
   $.ajax({
     type: "GET",
-    url: `./api/appointment/${appointmentId}/`,
+    url: `./api/appointments/${appointmentId}/`,
     dataType: "json",
     beforeSend: () => spinner.show(),
     complete: () => spinner.hide(),
@@ -227,7 +227,7 @@ AppointmentPage.prototype.renderComments = function (appointmentId) {
 
   $.ajax({
     type: "GET",
-    url: `./api/comment/${appointmentId}/`,
+    url: `./api/comments/${appointmentId}/`,
     dataType: "json",
     beforeSend: () => spinner.show(),
     complete: () => spinner.hide(),
@@ -258,7 +258,7 @@ AppointmentPage.prototype.postComment = function (appointmentId, userId) {
 
   $.ajax({
     type: "POST",
-    url: "./api/comment/",
+    url: "./api/comments/",
     dataType: "json",
     contentType: "application/json",
     beforeSend: () => spinner.show(),
@@ -289,7 +289,7 @@ AppointmentPage.prototype.postVote = function (
 ) {
   $.ajax({
     type: "POST",
-    url: "./api/vote/",
+    url: "./api/votes/",
     contentType: "application/json",
     beforeSend: () => spinner.show(),
     complete: () => spinner.hide(),
@@ -305,7 +305,7 @@ AppointmentPage.prototype.postVote = function (
 
 AppointmentPage.prototype.getVoteLabelsString = function (appointmentId) {
   var labelsString = $.ajax({
-    url: `./api/vote/${appointmentId}/`,
+    url: `./api/votes/${appointmentId}/`,
     type: "GET",
     async: false,
     beforeSend: () => spinner.show(),
@@ -327,7 +327,7 @@ AppointmentPage.prototype.getUserIdByUserName = function (userName) {
   const getId = async () => {
     return new Promise((resolve, reject) => {
       $.ajax({
-        url: `./api/user/`,
+        url: `./api/users/`,
         type: "GET",
         data: { username: userName, action: "getid" },
         contentType: "application/json",

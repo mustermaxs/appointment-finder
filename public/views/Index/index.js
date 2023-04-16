@@ -21,7 +21,7 @@ IndexPage.prototype.formatDateWithHours = function (inputDate) {
 IndexPage.prototype.renderAppointments = async function () {
   $.ajax({
     type: "GET",
-    url: "./api/appointment/",
+    url: "./api/appointments/",
     dataType: "json",
     beforeSend: () => spinner.show(),
     success: ({ data }) => {

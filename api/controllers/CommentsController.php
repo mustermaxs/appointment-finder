@@ -2,7 +2,7 @@
 require_once getcwd() . "/api/BaseController.php";
 require_once getcwd() . "/api/models/CommentModel.php";
 
-class CommentController extends BaseController
+class CommentsController extends BaseController
 {
     protected function init()
     {
@@ -14,6 +14,9 @@ class CommentController extends BaseController
         // $data = $this->getPostData();
         $appointmentId = intval($this->request["id"]);
         $comments = $this->model->getCommentsByAppointmentId($appointmentId);
+        if ($comments == null)
+            return $this->errorResponse("comment doesn't exist", 400);
+
         $this->successResponse("", $comments);
     }
 

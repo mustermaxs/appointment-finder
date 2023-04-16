@@ -3,7 +3,7 @@
 require_once getcwd() . "/api/BaseController.php";
 require_once getcwd() . "/api/models/UserModel.php";
 
-class UserController extends BaseController
+class UsersController extends BaseController
 {
     protected function init()
     {

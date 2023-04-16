@@ -2,7 +2,7 @@
 require_once getcwd() . "/api/BaseController.php";
 require_once getcwd() . "/api/models/AppointmentModel.php";
 
-class AppointmentController extends BaseController
+class AppointmentsController extends BaseController
 {
     protected function init()
     {
@@ -16,7 +16,7 @@ class AppointmentController extends BaseController
             $appointment = $this->model->getAppointmentById($appointmentId);
 
             if ($appointment == NULL) {
-                $this->errorResponse("No Appointment found!", $appointment);
+                $this->errorResponse("No Appointment found!", 400);
                 return;
             }
             $this->successResponse("", $appointment);
@@ -35,7 +35,11 @@ class AppointmentController extends BaseController
 
     public function addVote($data)
     {
-        $this->model->addVoteByOptionId($data->optionId, $data->userId);
+        $voteId = $this->model->addVoteByOptionId($data->optionId, $data->userId);
+
+        if ($voteId == null)
+            return $this->errorResponse("something went wrong", 400);
+
         $this->successResponse("added voting");
     }
 
@@ -53,6 +57,10 @@ class AppointmentController extends BaseController
         $options = $jsonPostData->options;
 
         $appointmentId = $this->model->addAppointment($title, $expirationDate, $location, $description, $userId, $options);
+
+        if ($appointmentId == null)
+            return $this->errorResponse("something went wrong", 400);
+
         $this->successResponse("", $appointmentId);
     }
 }

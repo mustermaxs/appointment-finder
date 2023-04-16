@@ -3,3 +3,4 @@ appointment-finder.code-workspace
 config.php
 launch.json
 api/dbConfig.php
+.VSCodeCounter

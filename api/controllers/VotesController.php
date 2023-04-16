@@ -2,7 +2,7 @@
 require_once getcwd() . "/api/BaseController.php";
 require_once getcwd() . "/api/models/VoteModel.php";
 
-class VoteController extends BaseController
+class VotesController extends BaseController
 {
     protected function init()
     {
@@ -13,6 +13,10 @@ class VoteController extends BaseController
     {
         $appointmentId = intval($this->request["id"]);
         $votes = $this->model->getVotesByAppointmentId($appointmentId);
+
+        if ($votes == null)
+            return $this->errorResponse("not found", 400);
+
         $this->successResponse("", $votes);
     }
 
@@ -28,10 +32,9 @@ class VoteController extends BaseController
 
         $voteId = $this->model->addVoteByAppointmentId($optionId, $userId, $appointmentId);
         if ($voteId >= 1) {
-                $this->successResponse("added vote", null, 200);
+            $this->successResponse("added vote", null, 200);
         } else {
             $this->errorResponse("adding vote failed", 400);
         }
     }
 }
-

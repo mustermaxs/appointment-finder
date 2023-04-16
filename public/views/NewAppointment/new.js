@@ -143,7 +143,7 @@ NewAppointmentPage.prototype.init = function (containerEl) {
 
       $.ajax({
         type: "POST",
-        url: "./api/appointment/",
+        url: "./api/appointments/",
         dataType: "json",
         data: JSON.stringify({
           title: $("#title").val(),
